@@ -1,0 +1,23 @@
+<div class="editor-container">
+  <div class="toolbar">
+    <button (click)="toggleMode()">
+      {{ isRawMode() ? 'View Formatted' : 'View Raw Markdown' }}
+    </button>
+  </div>
+
+  <div class="editor-content">
+    <textarea 
+      *ngIf="isRawMode()" 
+      class="raw-editor" 
+      [ngModel]="markdownContent()" 
+      (ngModelChange)="markdownContent.set($event)"
+      placeholder="Type markdown here...">
+    </textarea>
+
+    <div 
+      *ngIf="!isRawMode()" 
+      class="formatted-view" 
+      [innerHTML]="sanitizedHtml()">
+    </div>
+  </div>
+</div>

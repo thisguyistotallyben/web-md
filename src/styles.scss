@@ -1,0 +1,81 @@
+$color-bg-deep: #0d0d0d;      // Main background
+$color-bg-surface: #1a1a1a;   // Surface / Panels
+$color-bg-well: #121212;      // Nested sections
+$color-accent: #ffcc00;       // Golden Wing Yellow
+$color-text-main: #e0e0e0;    // Primary text
+$color-text-muted: #888888;   // Secondary/helper text
+$color-border: #2a2a2a;       // Subtle dividers
+
+:root {
+  --bg-deep: #{$color-bg-deep};
+  --bg-surface: #{$color-bg-surface};
+  --bg-well: #{$color-bg-well};
+  --accent: #{$color-accent};
+  --text-main: #{$color-text-main};
+  --text-muted: #{$color-text-muted};
+  --border-color: #{$color-border};
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 4px;
+  --spacing-tight: 1rem;
+  --spacing-standard: 1.5rem;
+}
+
+body {
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px; // Adjust slightly for reading markdown
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4 {
+  letter-spacing: -0.015em;
+  color: var(--text-main);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  background-color: var(--bg-surface);
+  padding: 0.2em 0.4em;
+  border-radius: var(--radius-sm);
+  font-size: 0.9em;
+}
+
+pre {
+  background-color: var(--bg-surface);
+  padding: var(--spacing-standard);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  code {
+    background-color: transparent;
+    padding: 0;
+  }
+}
+
+blockquote {
+  border-left: 4px solid var(--accent);
+  margin-left: 0;
+  padding-left: 1rem;
+  color: var(--text-muted);
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 2rem 0;
+}
