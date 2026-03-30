@@ -177,7 +177,9 @@
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
   padding: 3rem 4rem;
+  padding-bottom: calc(3rem + var(--keyboard-height, 0px)); // Add keyboard space
   touch-action: pan-y;
+  transition: padding-bottom 0.1s ease-out; // Smooth transition when keyboard pops up
 
   @media (max-width: 768px) {
     padding: 2rem 1.5rem;
