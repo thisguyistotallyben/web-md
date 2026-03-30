@@ -71,23 +71,37 @@ body.theme-gruvbox {
   --border-color: #504945;
 }
 
-body {
+html, body {
   height: 100%;
+  height: -webkit-fill-available;
+  height: 100dvh;
   width: 100%;
+  margin: 0;
+  padding: 0;
   overflow: hidden;
-  position: fixed; // Prevent mobile bounce/scroll
+  position: fixed;
+  overscroll-behavior: none;
 }
 
 body {
   background-color: var(--bg-deep);
   color: var(--text-main);
-  margin: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 16px;
   display: flex;
   flex-direction: column;
+}
+
+app-root, app-main-layout, app-sidebar, app-editor {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+app-root {
+  overflow: hidden;
 }
 
 * {

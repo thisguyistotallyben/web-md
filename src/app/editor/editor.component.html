@@ -15,13 +15,13 @@
 
     <div class="actions" *ngIf="activeFilePath()">
       <button class="action-menu-btn" (click)="isActionMenuOpen.set(!isActionMenuOpen())" [class.active]="isActionMenuOpen()">
-        <span class="icon">⋮</span>
+        <fa-icon [icon]="faEllipsisV"></fa-icon>
       </button>
 
       <!-- Action Menu Popup -->
       <div class="action-popup" *ngIf="isActionMenuOpen()">
         <button class="delete-btn" (click)="deleteActiveNote()">
-          <span class="icon">🗑️</span>
+          <fa-icon [icon]="faTrash"></fa-icon>
           Delete Note
         </button>
       </div>

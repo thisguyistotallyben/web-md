@@ -4,13 +4,13 @@
     <ng-container *ngIf="!currentNotebook(); else innerHeader">
       <span class="logo"><span class="brand-web">Web</span>MD</span>
       <button class="settings-btn" (click)="toggleSettings()" title="Settings" [class.active]="isSettingsOpen()">
-        <span class="icon">⚙️</span>
+        <fa-icon [icon]="faGear"></fa-icon>
       </button>
     </ng-container>
 
     <ng-template #innerHeader>
       <button class="back-btn" (click)="goBack()" title="Go Back">
-        <span class="icon">←</span>
+        <fa-icon [icon]="faChevronLeft"></fa-icon>
       </button>
       <div class="title-container">
         <span *ngIf="!isRenaming() && !isSettingsOpen()" class="view-title" (click)="startRename()">
@@ -43,7 +43,9 @@
              [class.note-item]="item.type === 'note'"
              [class.active]="activeNotePath() === item.path"
              (click)="selectItem(item)">
-          <span class="icon">{{ item.type === 'folder' ? '📁' : '📄' }}</span>
+          <span class="icon">
+            <fa-icon [icon]="item.type === 'folder' ? faFolder : faFileAlt"></fa-icon>
+          </span>
           <span class="name">{{ item.type === 'note' ? item.name.replace('.md', '') : item.name }}</span>
           <span *ngIf="item.type === 'folder'" class="meta">{{ item.children?.length }} items</span>
         </div>
@@ -75,7 +77,8 @@
                (click)="setTheme('sepia')">
             <span class="theme-name">Sepia Paper</span>
             <span class="check" *ngIf="themeService.currentTheme() === 'sepia'">✓</span>
-          </div>          <div class="theme-option" 
+          </div>
+          <div class="theme-option" 
                [class.active]="themeService.currentTheme() === 'high-contrast'"
                (click)="setTheme('high-contrast')">
             <span class="theme-name">High Contrast Light</span>
@@ -93,25 +96,28 @@
             <span class="theme-name">Gruvbox</span>
             <span class="check" *ngIf="themeService.currentTheme() === 'gruvbox'">✓</span>
           </div>
-          </div>      </div>
-    </ng-template>  </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
 
   <!-- Footer Section -->
   <div class="footer" *ngIf="!isSettingsOpen()">
-    <!-- Root View Actions -->
     <button *ngIf="!currentNotebook()" class="action-btn full-width" (click)="createNewNotebook()">
-      + New Notebook
+      <fa-icon [icon]="faPlus" class="btn-icon"></fa-icon> New Notebook
     </button>
     
-    <!-- Notebook View Actions -->
     <div *ngIf="currentNotebook() && !currentSubFolder()" class="split-actions">
-      <button class="action-btn" (click)="createNewNote()">+ Note</button>
-      <button class="action-btn" (click)="createNewFolder()">+ Folder</button>
+      <button class="action-btn" (click)="createNewNote()">
+        <fa-icon [icon]="faPlus" class="btn-icon"></fa-icon> Note
+      </button>
+      <button class="action-btn" (click)="createNewFolder()">
+        <fa-icon [icon]="faPlus" class="btn-icon"></fa-icon> Folder
+      </button>
     </div>
 
-    <!-- Sub-Folder View Actions -->
     <button *ngIf="currentSubFolder()" class="action-btn full-width" (click)="createNewNote()">
-      + New Note
+      <fa-icon [icon]="faPlus" class="btn-icon"></fa-icon> New Note
     </button>
   </div>
 </div>

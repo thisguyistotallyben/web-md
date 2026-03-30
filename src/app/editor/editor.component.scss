@@ -17,6 +17,7 @@
   background-color: var(--bg-deep);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   z-index: 10;
+  touch-action: none;
 
   @media (max-width: 768px) {
     padding: 0 1rem 0 4rem;
@@ -124,7 +125,10 @@
 .editor-body {
   flex: 1;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
   padding: 3rem 4rem;
+  touch-action: pan-y;
 
   @media (max-width: 768px) {
     padding: 2rem 1.5rem;

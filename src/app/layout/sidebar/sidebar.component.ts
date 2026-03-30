@@ -5,11 +5,13 @@ import { FileService, FileItem } from '../../core/services/file.service';
 import { ThemeService, Theme } from '../../core/services/theme.service';
 import { MainLayoutComponent } from '../main-layout/main-layout.component';
 import { ModalService } from '../../core/services/modal.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faFolder, faFileAlt, faChevronLeft, faGear, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FontAwesomeModule],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
@@ -18,6 +20,13 @@ export class SidebarComponent implements OnInit {
   public themeService = inject(ThemeService);
   private layout = inject(MainLayoutComponent);
   private modalService = inject(ModalService);
+
+  // Icons
+  faFolder = faFolder;
+  faFileAlt = faFileAlt;
+  faChevronLeft = faChevronLeft;
+  faGear = faGear;
+  faPlus = faPlus;
 
   notebooks = signal<FileItem[]>([]);
   currentNotebook = signal<FileItem | null>(null);

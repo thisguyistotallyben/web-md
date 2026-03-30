@@ -1,13 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
+import { AuthComponent } from './features/auth/auth.component';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [MainLayoutComponent],
+  imports: [CommonModule, MainLayoutComponent, AuthComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'web-md';
+  public authService = inject(AuthService);
 }

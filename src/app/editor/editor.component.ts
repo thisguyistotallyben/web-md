@@ -7,17 +7,24 @@ import { Markdown } from '@tiptap/markdown';
 import { TiptapEditorDirective } from 'ngx-tiptap';
 import { FileService } from '../core/services/file.service';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faEllipsisV, faTrash, faFileAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-editor',
   standalone: true,
-  imports: [CommonModule, FormsModule, TiptapEditorDirective],
+  imports: [CommonModule, FormsModule, TiptapEditorDirective, FontAwesomeModule],
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class EditorComponent implements OnInit, OnDestroy {
   private fileService = inject(FileService);
+
+  // Icons
+  faEllipsisV = faEllipsisV;
+  faTrash = faTrash;
+  faFileAlt = faFileAlt;
 
   isSettingsOpen = signal<boolean>(false);
   isSaving = signal<boolean>(false);

@@ -4,7 +4,7 @@
   </aside>
 
   <button class="sidebar-toggle" (click)="toggleSidebar()" [title]="isSidebarCollapsed() ? 'Expand Sidebar' : 'Collapse Sidebar'">
-    <span class="icon">{{ isSidebarCollapsed() ? '☰' : '◀' }}</span>
+    <fa-icon [icon]="isSidebarCollapsed() ? faBars : faChevronLeft"></fa-icon>
   </button>
 
   <main class="main-content">

@@ -4,16 +4,24 @@ import { EditorComponent } from '../../editor/editor.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../core/services/modal.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faBars, faChevronLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarComponent, EditorComponent],
+  imports: [CommonModule, FormsModule, SidebarComponent, EditorComponent, FontAwesomeModule],
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.scss']
 })
 export class MainLayoutComponent {
   public modalService = inject(ModalService);
+  
+  // Icons
+  faBars = faBars;
+  faChevronLeft = faChevronLeft;
+  faPlus = faPlus;
+
   isSidebarCollapsed = signal<boolean>(false);
   modalValue = signal<string>('');
 
