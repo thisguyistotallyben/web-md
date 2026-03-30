@@ -1,0 +1,35 @@
+<div class="layout-container" [class.sidebar-collapsed]="isSidebarCollapsed()">
+  <aside class="sidebar-wrapper">
+    <app-sidebar></app-sidebar>
+  </aside>
+
+  <button class="sidebar-toggle" (click)="toggleSidebar()" [title]="isSidebarCollapsed() ? 'Expand Sidebar' : 'Collapse Sidebar'">
+    <span class="icon">{{ isSidebarCollapsed() ? '☰' : '◀' }}</span>
+  </button>
+
+  <main class="main-content">
+    <app-editor></app-editor>
+  </main>
+
+  <!-- Global Creation Modal -->
+  <div class="modal-backdrop" *ngIf="modalService.isOpen()" (click)="modalService.close()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">{{ modalService.config()?.title }}</div>
+      <div class="modal-body">
+        <input 
+          #modalInput
+          type="text" 
+          [ngModel]="modalService.config()?.value" 
+          (ngModelChange)="modalValue.set($event)"
+          [placeholder]="modalService.config()?.placeholder || ''" 
+          (keydown.enter)="confirm()"
+          (keydown.escape)="modalService.close()"
+          autofocus>
+      </div>
+      <div class="modal-footer">
+        <button class="cancel-btn" (click)="modalService.close()">Cancel</button>
+        <button class="confirm-btn" (click)="confirm()" [disabled]="!modalValue().trim()">Create</button>
+      </div>
+    </div>
+  </div>
+</div>

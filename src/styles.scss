@@ -21,6 +21,63 @@ $color-border: #2a2a2a;       // Subtle dividers
   --spacing-standard: 1.5rem;
 }
 
+body.theme-light {
+  --bg-deep: #fcfcfc;
+  --bg-surface: #ffffff;
+  --bg-well: #f0f0f0;
+  --accent: #b8860b; // Darker golden rod for better contrast
+  --text-main: #1a1a1a;
+  --text-muted: #666666;
+  --border-color: #e0e0e0;
+}
+
+body.theme-sepia {
+  --bg-deep: #f4ecd8;
+  --bg-surface: #efe3c2;
+  --bg-well: #e5d5a9;
+  --accent: #8b4513;
+  --text-main: #433422;
+  --text-muted: #705e4c;
+  --border-color: #dccba0;
+}
+
+body.theme-high-contrast {
+  --bg-deep: #ffffff;
+  --bg-surface: #ffffff;
+  --bg-well: #f0f0f0;
+  --accent: #0000ff;
+  --text-main: #000000;
+  --text-muted: #333333;
+  --border-color: #000000;
+}
+
+body.theme-dark-hc {
+  --bg-deep: #000000;
+  --bg-surface: #000000;
+  --bg-well: #111111;
+  --accent: #00ff00;
+  --text-main: #ffffff;
+  --text-muted: #aaaaaa;
+  --border-color: #ffffff;
+}
+
+body.theme-gruvbox {
+  --bg-deep: #282828;
+  --bg-surface: #3c3836;
+  --bg-well: #32302f;
+  --accent: #fe8019;
+  --text-main: #ebdbb2;
+  --text-muted: #a89984;
+  --border-color: #504945;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: fixed; // Prevent mobile bounce/scroll
+}
+
 body {
   background-color: var(--bg-deep);
   color: var(--text-main);
@@ -28,7 +85,9 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 16px; // Adjust slightly for reading markdown
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
 }
 
 * {

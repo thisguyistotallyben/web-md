@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { EditorComponent } from './editor/editor.component';
+import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [EditorComponent],
+  imports: [MainLayoutComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

@@ -1,0 +1,44 @@
+import { Injectable, signal, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+export type Theme = 'dark' | 'light' | 'sepia' | 'high-contrast' | 'dark-hc' | 'gruvbox';
+
+export interface AppSettings {
+  theme: Theme;
+  backupAWS?: boolean;
+  backupFrequency?: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ThemeService {
+  private http = inject(HttpClient);
+  currentTheme = signal<Theme>('dark');
+
+  loadSettings() {
+    this.http.get<AppSettings>('/api/settings').subscribe(settings => {
+      if (settings && settings.theme) {
+        this.setTheme(settings.theme, false);
+      }
+    });
+  }
+
+  setTheme(theme: Theme, save: boolean = true) {
+    // Remove all theme classes
+    document.body.classList.remove('theme-light', 'theme-sepia', 'theme-high-contrast', 'theme-dark-hc', 'theme-gruvbox');
+    
+    // Add new class if needed
+    if (theme === 'light') document.body.classList.add('theme-light');
+    if (theme === 'sepia') document.body.classList.add('theme-sepia');
+    if (theme === 'high-contrast') document.body.classList.add('theme-high-contrast');
+    if (theme === 'dark-hc') document.body.classList.add('theme-dark-hc');
+    if (theme === 'gruvbox') document.body.classList.add('theme-gruvbox');
+    
+    this.currentTheme.set(theme);
+
+    if (save) {
+      this.http.post('/api/settings', { theme }).subscribe();
+    }
+  }
+}

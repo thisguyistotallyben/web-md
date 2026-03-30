@@ -1,0 +1,117 @@
+<div class="sidebar">
+  <!-- Header Section -->
+  <div class="header" [class.drill-down]="currentNotebook()">
+    <ng-container *ngIf="!currentNotebook(); else innerHeader">
+      <span class="logo"><span class="brand-web">Web</span>MD</span>
+      <button class="settings-btn" (click)="toggleSettings()" title="Settings" [class.active]="isSettingsOpen()">
+        <span class="icon">⚙️</span>
+      </button>
+    </ng-container>
+
+    <ng-template #innerHeader>
+      <button class="back-btn" (click)="goBack()" title="Go Back">
+        <span class="icon">←</span>
+      </button>
+      <div class="title-container">
+        <span *ngIf="!isRenaming() && !isSettingsOpen()" class="view-title" (click)="startRename()">
+          {{ currentSubFolder()?.name || currentNotebook()?.name }}
+        </span>
+        <span *ngIf="isSettingsOpen()" class="view-title">Settings</span>
+        <input 
+          #renameInput
+          *ngIf="isRenaming()" 
+          class="rename-input" 
+          [value]="currentSubFolder()?.name || currentNotebook()?.name" 
+          (blur)="finishRename(renameInput.value)"
+          (keydown)="handleRenameKeydown($event, renameInput)"
+          autofocus>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Content Section -->
+  <div class="content">
+    <ng-container *ngIf="!isSettingsOpen(); else settings">
+      <div class="section-label">
+        {{ currentSubFolder() ? 'Sub-Folder Content' : (currentNotebook() ? 'Notebook Content' : 'Notebooks') }}
+      </div>
+      
+      <div class="items-list">
+        <div *ngFor="let item of currentItems()" 
+             class="sidebar-item" 
+             [class.folder-item]="item.type === 'folder'"
+             [class.note-item]="item.type === 'note'"
+             [class.active]="activeNotePath() === item.path"
+             (click)="selectItem(item)">
+          <span class="icon">{{ item.type === 'folder' ? '📁' : '📄' }}</span>
+          <span class="name">{{ item.type === 'note' ? item.name.replace('.md', '') : item.name }}</span>
+          <span *ngIf="item.type === 'folder'" class="meta">{{ item.children?.length }} items</span>
+        </div>
+        
+        <div *ngIf="currentItems().length === 0" class="empty-state">
+          No {{ currentSubFolder() || currentNotebook() ? 'notes' : 'notebooks' }} yet.
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #settings>
+      <div class="settings-view">
+        <div class="section-label">Formatting Theme</div>
+        <div class="theme-options">
+          <div class="theme-option" 
+               [class.active]="themeService.currentTheme() === 'dark'"
+               (click)="setTheme('dark')">
+            <span class="theme-name">Default Dark</span>
+            <span class="check" *ngIf="themeService.currentTheme() === 'dark'">✓</span>
+          </div>
+          <div class="theme-option" 
+               [class.active]="themeService.currentTheme() === 'light'"
+               (click)="setTheme('light')">
+            <span class="theme-name">Default Light</span>
+            <span class="check" *ngIf="themeService.currentTheme() === 'light'">✓</span>
+          </div>
+          <div class="theme-option" 
+               [class.active]="themeService.currentTheme() === 'sepia'"
+               (click)="setTheme('sepia')">
+            <span class="theme-name">Sepia Paper</span>
+            <span class="check" *ngIf="themeService.currentTheme() === 'sepia'">✓</span>
+          </div>          <div class="theme-option" 
+               [class.active]="themeService.currentTheme() === 'high-contrast'"
+               (click)="setTheme('high-contrast')">
+            <span class="theme-name">High Contrast Light</span>
+            <span class="check" *ngIf="themeService.currentTheme() === 'high-contrast'">✓</span>
+          </div>
+          <div class="theme-option" 
+               [class.active]="themeService.currentTheme() === 'dark-hc'"
+               (click)="setTheme('dark-hc')">
+            <span class="theme-name">High Contrast Dark</span>
+            <span class="check" *ngIf="themeService.currentTheme() === 'dark-hc'">✓</span>
+          </div>
+          <div class="theme-option" 
+               [class.active]="themeService.currentTheme() === 'gruvbox'"
+               (click)="setTheme('gruvbox')">
+            <span class="theme-name">Gruvbox</span>
+            <span class="check" *ngIf="themeService.currentTheme() === 'gruvbox'">✓</span>
+          </div>
+          </div>      </div>
+    </ng-template>  </div>
+
+  <!-- Footer Section -->
+  <div class="footer" *ngIf="!isSettingsOpen()">
+    <!-- Root View Actions -->
+    <button *ngIf="!currentNotebook()" class="action-btn full-width" (click)="createNewNotebook()">
+      + New Notebook
+    </button>
+    
+    <!-- Notebook View Actions -->
+    <div *ngIf="currentNotebook() && !currentSubFolder()" class="split-actions">
+      <button class="action-btn" (click)="createNewNote()">+ Note</button>
+      <button class="action-btn" (click)="createNewFolder()">+ Folder</button>
+    </div>
+
+    <!-- Sub-Folder View Actions -->
+    <button *ngIf="currentSubFolder()" class="action-btn full-width" (click)="createNewNote()">
+      + New Note
+    </button>
+  </div>
+</div>

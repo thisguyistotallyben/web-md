@@ -1,23 +1,34 @@
 <div class="editor-container">
-  <div class="toolbar">
-    <button (click)="toggleMode()">
-      {{ isRawMode() ? 'View Formatted' : 'View Raw Markdown' }}
-    </button>
+  <div class="editor-header">
+    <div class="note-info">
+      <span *ngIf="!isRenaming()" class="note-title" (click)="startRename()">{{ displayFileName() }}</span>
+      <input 
+        #renameInput
+        *ngIf="isRenaming()" 
+        class="rename-input" 
+        [value]="displayFileName()" 
+        (blur)="finishRename(renameInput.value)"
+        (keydown)="handleRenameKeydown($event, renameInput)"
+        autofocus>
+      <span class="save-indicator" [class.visible]="isSaving()">Saving...</span>
+    </div>
+
+    <div class="actions" *ngIf="activeFilePath()">
+      <button class="action-menu-btn" (click)="isActionMenuOpen.set(!isActionMenuOpen())" [class.active]="isActionMenuOpen()">
+        <span class="icon">⋮</span>
+      </button>
+
+      <!-- Action Menu Popup -->
+      <div class="action-popup" *ngIf="isActionMenuOpen()">
+        <button class="delete-btn" (click)="deleteActiveNote()">
+          <span class="icon">🗑️</span>
+          Delete Note
+        </button>
+      </div>
+    </div>
   </div>
 
-  <div class="editor-content">
-    <textarea 
-      *ngIf="isRawMode()" 
-      class="raw-editor" 
-      [ngModel]="markdownContent()" 
-      (ngModelChange)="markdownContent.set($event)"
-      placeholder="Type markdown here...">
-    </textarea>
-
-    <div 
-      *ngIf="!isRawMode()" 
-      class="formatted-view" 
-      [innerHTML]="sanitizedHtml()">
-    </div>
+  <div class="editor-body">
+    <tiptap-editor [editor]="editor"></tiptap-editor>
   </div>
 </div>

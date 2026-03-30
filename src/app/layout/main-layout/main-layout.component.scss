@@ -1,0 +1,196 @@
+.layout-container {
+  display: flex;
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
+
+  .sidebar-wrapper {
+    width: 260px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease, margin-left 0.3s ease, box-shadow 0.3s ease;
+    z-index: 20;
+    box-shadow: 0 0 0 rgba(0,0,0,0);
+  }
+
+  .main-content {
+    flex: 1;
+    background-color: var(--bg-deep);
+    overflow-y: auto;
+    transition: margin-left 0.3s ease;
+  }
+
+  /* Toggle Button Styling - Integrated into Header */
+  .sidebar-toggle {
+    position: absolute;
+    top: 0;
+    left: 260px;
+    z-index: 30;
+    background-color: transparent;
+    color: var(--text-muted);
+    border: none;
+    border-right: 1px solid var(--border-color);
+    width: 50px;
+    height: 60px; // Match header height
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: left 0.3s ease, color 0.2s;
+
+    &:hover {
+      color: var(--accent);
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    .icon {
+      font-size: 1.2rem;
+    }
+  }
+
+  /* Collapsed State */
+  &.sidebar-collapsed {
+    .sidebar-wrapper {
+      margin-left: -260px;
+      box-shadow: none;
+    }
+    
+    .sidebar-toggle {
+      left: 0;
+    }
+  }
+
+  /* Responsive / Mobile Behavior */
+  @media (max-width: 768px) {
+    .sidebar-wrapper {
+      position: absolute;
+      height: 100%;
+    }
+
+    .sidebar-toggle {
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      
+      &:hover {
+        background-color: var(--bg-well);
+      }
+    }
+
+    /* Transition logic for mobile overlay */
+    &:not(.sidebar-collapsed) {
+      .sidebar-wrapper {
+        transform: translateX(0);
+        margin-left: 0;
+        box-shadow: 10px 0 30px rgba(0,0,0,0.2); // Softer shadow
+      }
+    }
+
+    &.sidebar-collapsed {
+      .sidebar-wrapper {
+        transform: translateX(-100%);
+        margin-left: 0;
+        box-shadow: none; // No shadow when hidden
+      }
+    }
+  }
+}
+
+/* Global Modal Styling */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 10000; // Above everything
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  animation: modalEnter 0.3s ease-out;
+}
+
+@keyframes modalEnter {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header {
+  padding: 1.5rem 1.5rem 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.modal-body {
+  padding: 1rem 1.5rem;
+  
+  input {
+    width: 100%;
+    background-color: var(--bg-deep);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-main);
+    padding: 0.75rem 1rem;
+    font-family: inherit;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &:focus {
+      border-color: var(--accent);
+    }
+  }
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+
+  button {
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .cancel-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    &:hover { background-color: rgba(255, 255, 255, 0.05); color: var(--text-main); }
+  }
+
+  .confirm-btn {
+    background-color: var(--accent);
+    color: var(--bg-deep);
+    border: 1px solid var(--accent);
+    
+    &:hover:not(:disabled) {
+      background-color: #ffffff;
+      border-color: #ffffff;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
