@@ -8,7 +8,7 @@ import { TiptapEditorDirective } from 'ngx-tiptap';
 import { FileService } from '../core/services/file.service';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faEllipsisV, faTrash, faFileAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faTrash, faFileAlt, faBold, faItalic, faHeading, faRemoveFormat, faQuoteRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-editor',
@@ -25,6 +25,11 @@ export class EditorComponent implements OnInit, OnDestroy {
   faEllipsisV = faEllipsisV;
   faTrash = faTrash;
   faFileAlt = faFileAlt;
+  faBold = faBold;
+  faItalic = faItalic;
+  faHeading = faHeading;
+  faRemoveFormat = faRemoveFormat;
+  faQuoteRight = faQuoteRight;
 
   isSettingsOpen = signal<boolean>(false);
   isSaving = signal<boolean>(false);
@@ -56,6 +61,8 @@ export class EditorComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit() {
+    // Default visibility: ON for mobile, OFF for desktop (Note: isToolbarVisible was removed previously but logic remained in ngOnInit, I'll keep it clean)
+    
     // Set up debounced autosave (save 500ms after last keystroke)
     this.saveSubject.pipe(
       debounceTime(500),
@@ -129,6 +136,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     if (event.key === 'Enter') this.finishRename(input.value);
     else if (event.key === 'Escape') this.isRenaming.set(false);
   }
+
+  // Formatting Commands
+  toggleBold() { this.editor.chain().focus().toggleBold().run(); }
+  toggleItalic() { this.editor.chain().focus().toggleItalic().run(); }
+  toggleHeading(level: any) { this.editor.chain().focus().toggleHeading({ level }).run(); }
+  toggleBlockquote() { this.editor.chain().focus().toggleBlockquote().run(); }
+  clearFormatting() { this.editor.chain().focus().unsetAllMarks().clearNodes().run(); }
 
   deleteActiveNote() {
     const path = this.activeFilePath();

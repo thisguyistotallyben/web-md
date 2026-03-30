@@ -4,7 +4,7 @@ import { Injectable, signal } from '@angular/core';
   providedIn: 'root'
 })
 export class AuthService {
-  isAuthenticated = signal<boolean>(false);
+  isAuthenticated = signal<boolean>(true);
 
   login(username: string, password: string): boolean {
     if (username === 'admin' && password === 'admin') {

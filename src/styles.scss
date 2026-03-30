@@ -1,10 +1,10 @@
-$color-bg-deep: #0d0d0d;      // Main background
-$color-bg-surface: #1a1a1a;   // Surface / Panels
-$color-bg-well: #121212;      // Nested sections
+$color-bg-deep: #0a0a0a;      // Pitch Black Body
+$color-bg-surface: #141414;   // Slightly lighter Sidebar
+$color-bg-well: #0f0f0f;      // Dark Header/Toolbar
 $color-accent: #ffcc00;       // Golden Wing Yellow
 $color-text-main: #e0e0e0;    // Primary text
 $color-text-muted: #888888;   // Secondary/helper text
-$color-border: #2a2a2a;       // Subtle dividers
+$color-border: #222222;       // Thinner dividers
 
 :root {
   --bg-deep: #{$color-bg-deep};

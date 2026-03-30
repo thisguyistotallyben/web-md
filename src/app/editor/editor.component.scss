@@ -14,10 +14,9 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--border-color);
-  background-color: var(--bg-deep);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: var(--bg-well); // Darker than deep
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 10;
-  touch-action: none;
 
   @media (max-width: 768px) {
     padding: 0 1rem 0 4rem;
@@ -31,7 +30,7 @@
     .note-icon { opacity: 0.6; flex-shrink: 0; }
     .note-title { 
       font-weight: 500; 
-      color: var(--text-muted);
+      color: var(--text-main); // Brighter for better visibility
       font-size: 0.95rem;
       cursor: pointer;
       padding: 2px 4px;
@@ -71,7 +70,7 @@
     align-items: center;
     position: relative;
 
-    .action-menu-btn {
+    .action-menu-btn, .toolbar-toggle-btn {
       background: none;
       border: none;
       color: var(--text-muted);
@@ -83,7 +82,57 @@
       border-radius: var(--radius-sm);
       transition: all 0.2s;
       &:hover, &.active { background-color: rgba(255, 255, 255, 0.05); color: var(--text-main); }
+      &.active { color: var(--accent); }
     }
+  }
+}
+
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 4rem;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  min-height: 44px;
+
+  @media (max-width: 768px) {
+    padding: 0.5rem 1rem;
+    overflow-x: auto;
+  }
+
+  button {
+    background: none;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+    }
+
+    &.active {
+      background-color: rgba(255, 204, 0, 0.1);
+      color: var(--accent);
+    }
+  }
+
+  .divider {
+    width: 1px;
+    height: 20px;
+    background-color: var(--border-color);
+    margin: 0 0.25rem;
   }
 }
 
