@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewEncapsulation, signal, computed, inject, HostListener, OnInit } from '@angular/core';
+import { Component, OnDestroy, ViewEncapsulation, signal, computed, inject, HostListener, OnInit, effect, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Editor } from '@tiptap/core';
@@ -8,6 +8,7 @@ import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { TiptapEditorDirective } from 'ngx-tiptap';
 import { FileService } from '../core/services/file.service';
 import { RealtimeService } from '../core/services/realtime.service';
+import { ViewportService } from '../core/services/viewport.service';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faEllipsisV, faTrash, faFileAlt, faBold, faItalic, faHeading, faRemoveFormat, faQuoteRight, faCode } from '@fortawesome/free-solid-svg-icons';
@@ -27,6 +28,9 @@ const lowlight = createLowlight(all);
 export class EditorComponent implements OnInit, OnDestroy {
   private fileService = inject(FileService);
   private realtimeService = inject(RealtimeService);
+  private viewportService = inject(ViewportService);
+
+  @ViewChild('editorBody') editorBody!: ElementRef<HTMLDivElement>;
 
   // Icons
   faEllipsisV = faEllipsisV;
@@ -51,6 +55,40 @@ export class EditorComponent implements OnInit, OnDestroy {
   private saveSubject = new Subject<string>();
   private lastTypingTime = 0;
 
+  constructor() {
+    // Automatically scroll cursor to top when keyboard height changes
+    effect(() => {
+      const height = this.viewportService.keyboardHeight();
+      if (height > 0 && this.editor) {
+        console.log('[Editor] Keyboard opened, forcing selection to top...');
+        setTimeout(() => this.scrollToSelection(), 100);
+      }
+    });
+  }
+
+  private scrollToSelection() {
+    if (!this.editor || !this.editorBody) return;
+
+    const { view } = this.editor;
+    const { selection } = view.state;
+    
+    // Get the pixel position of the cursor
+    const coords = view.coordsAtPos(selection.from);
+    const containerRect = this.editorBody.nativeElement.getBoundingClientRect();
+    
+    // Calculate the relative scroll position
+    const relativeTop = coords.top - containerRect.top;
+    const currentScroll = this.editorBody.nativeElement.scrollTop;
+    
+    // Target position: 100px from the top header
+    const targetScroll = currentScroll + relativeTop - 100;
+
+    this.editorBody.nativeElement.scrollTo({
+      top: targetScroll,
+      behavior: 'smooth'
+    });
+  }
+
   editor = new Editor({
     extensions: [
       StarterKit.configure({
@@ -65,11 +103,9 @@ export class EditorComponent implements OnInit, OnDestroy {
     onUpdate: ({ editor }) => {
       this.lastTypingTime = Date.now();
       const path = this.activeFilePath();
-      console.log('Tiptap Update - Path:', path);
       if (path) {
         try {
           const markdown = (editor as any).getMarkdown();
-          console.log('Markdown Length:', markdown.length);
           this.saveSubject.next(markdown);
         } catch (e) {
           console.error('Error getting markdown:', e);
@@ -84,15 +120,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       const currentPath = this.activeFilePath();
       const timeSinceLastType = Date.now() - this.lastTypingTime;
       
-      console.log('[Editor] Sync Check:', { 
-        currentPath, 
-        remotePath: data.path, 
-        timeSinceLastType 
-      });
-
-      // Only reload if it's the current file AND we aren't actively typing (1s buffer)
       if (currentPath === data.path && timeSinceLastType > 1000) {
-        console.log('[Editor] Conditions met, reloading content from:', data.path);
         this.fileService.read(data.path).subscribe(res => {
           this.editor.commands.setContent(res.content, { 
             emitUpdate: false, 
@@ -102,22 +130,19 @@ export class EditorComponent implements OnInit, OnDestroy {
       }
     });
 
-    // Set up debounced autosave (save 500ms after last keystroke)
+    // Set up debounced autosave
     this.saveSubject.pipe(
       debounceTime(500),
       distinctUntilChanged()
     ).subscribe(markdown => {
       const path = this.activeFilePath();
-      console.log('Save Triggered - Path:', path);
       if (path) {
         this.isSaving.set(true);
         this.fileService.write(path, markdown).subscribe({
           next: () => {
-            console.log('Save Successful');
             setTimeout(() => this.isSaving.set(false), 300);
           },
-          error: (err) => {
-            console.error('Save Failed:', err);
+          error: () => {
             this.isSaving.set(false);
           }
         });
@@ -128,10 +153,8 @@ export class EditorComponent implements OnInit, OnDestroy {
   @HostListener('window:open-note', ['$event'])
   onOpenNote(event: any) {
     const filePath = event.detail;
-    console.log('Open Note Requested:', filePath);
     this.fileService.read(filePath).subscribe({
       next: (data) => {
-        console.log('File Read Success - Length:', data.content.length);
         this.activeFilePath.set(filePath);
         this.activeFileName.set(filePath.split('/').pop() || 'Untitled');
         this.editor.commands.setContent(data.content, { 
