@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { AuthComponent } from './features/auth/auth.component';
@@ -18,4 +18,12 @@ export class AppComponent {
   public authService = inject(AuthService);
   private viewportService = inject(ViewportService);
   private realtimeService = inject(RealtimeService);
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll() {
+    // If the window scrolls (likely due to mobile focus), snap it back instantly
+    if (window.scrollY !== 0 || window.scrollX !== 0) {
+      window.scrollTo(0, 0);
+    }
+  }
 }

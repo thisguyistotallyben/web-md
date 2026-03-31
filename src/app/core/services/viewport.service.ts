@@ -26,17 +26,17 @@ export class ViewportService {
     const vv = window.visualViewport;
     if (!vv) return;
 
-    // vv.height is the actual space available above the keyboard
     const currentHeight = vv.height;
     const keyboardHeight = window.innerHeight - vv.height;
     
-    // Update global CSS variables
     document.documentElement.style.setProperty('--visual-height', `${currentHeight}px`);
     document.documentElement.style.setProperty('--keyboard-height', `${Math.max(0, keyboardHeight)}px`);
-    
-    // Force the body to scroll to the top to prevent browser "helper" offsets
+
+    // Nuclear option: Force the browser back to the top to prevent the "shifted UI" look.
+    // We do this twice to ensure different browser engines (iOS/Chrome) respect it.
     if (keyboardHeight > 0) {
       window.scrollTo(0, 0);
+      document.body.scrollTop = 0;
     }
   }
 }

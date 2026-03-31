@@ -177,13 +177,23 @@
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
   padding: 3rem 4rem;
-  padding-bottom: calc(3rem + var(--keyboard-height, 0px)); // Add keyboard space
   touch-action: pan-y;
-  transition: padding-bottom 0.1s ease-out; // Smooth transition when keyboard pops up
+  display: flex;
+  flex-direction: column;
+  
+  // Safe-area scrolling
+  scroll-padding-top: 100px; // Keep text well below header when auto-scrolling
+  scroll-padding-bottom: calc(2rem + var(--keyboard-height, 0px));
+  padding-bottom: calc(3rem + var(--keyboard-height, 0px));
 
   @media (max-width: 768px) {
     padding: 2rem 1.5rem;
+    padding-bottom: calc(2rem + var(--keyboard-height, 0px));
   }
+}
+
+.keyboard-spacer {
+  display: none; // Removing physical spacer in favor of clean padding
 }
 
 .tiptap {
@@ -192,6 +202,8 @@
   font-size: 16px;
   color: var(--text-main);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  flex: 1;
+  min-height: 100%; // Ensure editor is always at least as tall as the viewport
 
   > * + * {
     margin-top: 1rem;
