@@ -19,16 +19,32 @@ $color-border: #222222;       // Thinner dividers
   --radius-sm: 4px;
   --spacing-tight: 1rem;
   --spacing-standard: 1.5rem;
+
+  /* Default Dark Code Colors */
+  --code-comment: #7c7c7c;
+  --code-keyword: var(--accent);
+  --code-string: #b5cea8;
+  --code-number: #dcdcaa;
+  --code-title: #4ec9b0;
+  --code-type: #9cdcfe;
 }
 
 body.theme-light {
   --bg-deep: #fcfcfc;
   --bg-surface: #ffffff;
   --bg-well: #f0f0f0;
-  --accent: #b8860b; // Darker golden rod for better contrast
+  --accent: #b8860b;
   --text-main: #1a1a1a;
   --text-muted: #666666;
   --border-color: #e0e0e0;
+
+  /* Light Code Colors */
+  --code-comment: #008000;
+  --code-keyword: #0000ff;
+  --code-string: #a31515;
+  --code-number: #098658;
+  --code-title: #267f99;
+  --code-type: #af00db;
 }
 
 body.theme-sepia {
@@ -39,6 +55,14 @@ body.theme-sepia {
   --text-main: #433422;
   --text-muted: #705e4c;
   --border-color: #dccba0;
+
+  /* Sepia Code Colors */
+  --code-comment: #a69e8a;
+  --code-keyword: #8b4513;
+  --code-string: #5d7a1f;
+  --code-number: #b05a00;
+  --code-title: #3a5a67;
+  --code-type: #7a4a8a;
 }
 
 body.theme-high-contrast {
@@ -49,6 +73,14 @@ body.theme-high-contrast {
   --text-main: #000000;
   --text-muted: #333333;
   --border-color: #000000;
+
+  /* HC Light Code Colors */
+  --code-comment: #000000;
+  --code-keyword: #0000ff;
+  --code-string: #000000;
+  --code-number: #0000ff;
+  --code-title: #0000ff;
+  --code-type: #000000;
 }
 
 body.theme-dark-hc {
@@ -59,6 +91,14 @@ body.theme-dark-hc {
   --text-main: #ffffff;
   --text-muted: #aaaaaa;
   --border-color: #ffffff;
+
+  /* HC Dark Code Colors */
+  --code-comment: #aaaaaa;
+  --code-keyword: #00ff00;
+  --code-string: #ffffff;
+  --code-number: #00ff00;
+  --code-title: #00ff00;
+  --code-type: #ffffff;
 }
 
 body.theme-gruvbox {
@@ -69,6 +109,14 @@ body.theme-gruvbox {
   --text-main: #ebdbb2;
   --text-muted: #a89984;
   --border-color: #504945;
+
+  /* Gruvbox Code Colors */
+  --code-comment: #928374;
+  --code-keyword: #fb4934;
+  --code-string: #b8bb26;
+  --code-number: #d3869b;
+  --code-title: #b8bb26;
+  --code-type: #fabd2f;
 }
 
 html, body {
@@ -81,6 +129,8 @@ html, body {
   overflow: hidden;
   position: fixed;
   overscroll-behavior: none;
+  touch-action: none; /* Disable all browser-level gestures at root */
+  -webkit-user-select: none;
 }
 
 body {
@@ -90,8 +140,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 16px;
-  display: flex;
-  flex-direction: column;
 }
 
 app-root, app-main-layout, app-sidebar, app-editor {

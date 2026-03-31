@@ -239,12 +239,27 @@
     border-radius: var(--radius-md);
     overflow-x: auto;
     border: 1px solid var(--border-color);
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    line-height: 1.5;
+
     code {
       background-color: transparent;
       padding: 0;
       color: inherit;
       font-size: 0.95em;
     }
+
+    /* Syntax Highlighting Colors - Theme Aware */
+    .hljs-comment, .hljs-quote { color: var(--code-comment); font-style: italic; }
+    .hljs-keyword, .hljs-selector-tag, .hljs-addition { color: var(--code-keyword); }
+    .hljs-number, .hljs-string, .hljs-meta .hljs-meta-string, .hljs-literal, .hljs-doctag, .hljs-regexp { color: var(--code-string); }
+    .hljs-title, .hljs-section, .hljs-name, .hljs-selector-id, .hljs-selector-class { color: var(--code-title); }
+    .hljs-attribute, .hljs-attr, .hljs-variable, .hljs-template-variable, .hljs-class .hljs-title, .hljs-type { color: var(--code-type); }
+    .hljs-symbol, .hljs-bullet, .hljs-subst, .hljs-meta, .hljs-link { color: var(--code-number); }
+    .hljs-built_in, .hljs-deletion { color: #e53935; }
+    .hljs-formula { background: #eee; }
+    .hljs-emphasis { font-style: italic; }
+    .hljs-strong { font-weight: bold; }
   }
 
   hr {
