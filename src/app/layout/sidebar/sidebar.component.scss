@@ -60,12 +60,18 @@
 }
 
 .section-label {
-  padding: 0.5rem 1.25rem;
+  padding: 1.5rem 1.25rem 0.75rem;
   font-size: 0.75rem;
   font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+  
+  &:not(:first-child) {
+    border-top: 1px solid var(--border-color);
+    margin-top: 0.5rem;
+  }
 }
 
 .items-list { padding-bottom: 1rem; }
@@ -80,7 +86,7 @@
   &.note-item { padding-left: 1.5rem; .icon { opacity: 0.6; font-size: 0.8rem; } }
 
   &.active {
-    background-color: rgba(184, 134, 11, 0.15); // Use a higher opacity/darker tint
+    background-color: var(--active-bg);
     color: var(--accent);
     border-right: 2px solid var(--accent);
     .name { color: var(--accent); font-weight: 600; }
@@ -94,11 +100,44 @@
 
 .settings-view {
   padding: 0 0 1rem 0;
+
+  .system-actions {
+    padding: 0.5rem 1.25rem;
+    
+    .restart-btn {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: rgba(255, 68, 68, 0.1);
+      color: #ff4444;
+      border: 1px solid rgba(255, 68, 68, 0.2);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      transition: all 0.2s;
+
+      &:hover {
+        background-color: #ff4444;
+        color: #ffffff;
+        border-color: #ff4444;
+      }
+    }
+  }
+
   .theme-option {
     display: flex; align-items: center; justify-content: space-between;
     padding: 0.75rem 1.25rem; cursor: pointer; color: var(--text-muted); font-size: 0.9rem;
+    transition: all 0.2s;
     &:hover { background-color: rgba(255, 255, 255, 0.03); color: var(--text-main); }
-    &.active { color: var(--accent); background-color: rgba(255, 204, 0, 0.05); }
+    &.active { 
+      color: var(--accent); 
+      background-color: var(--active-bg);
+    }
     .check { font-weight: bold; }
   }
 }
@@ -129,7 +168,7 @@
   &:hover {
     border-color: var(--accent);
     color: var(--accent);
-    background-color: rgba(255, 204, 0, 0.05);
+    background-color: var(--active-bg);
   }
 
   &.full-width { width: 100%; }

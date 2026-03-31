@@ -47,7 +47,7 @@
             <fa-icon [icon]="item.type === 'folder' ? faFolder : faFileAlt"></fa-icon>
           </span>
           <span class="name">{{ item.type === 'note' ? item.name.replace('.md', '') : item.name }}</span>
-          <span *ngIf="item.type === 'folder'" class="meta">{{ item.children?.length }} items</span>
+          <span *ngIf="item.type === 'folder'" class="meta">{{ item.childCount || 0 }} items</span>
         </div>
         
         <div *ngIf="currentItems().length === 0" class="empty-state">
@@ -97,9 +97,16 @@
             <span class="check" *ngIf="themeService.currentTheme() === 'gruvbox'">✓</span>
           </div>
         </div>
-      </div>
-    </ng-template>
-  </div>
+
+        <div class="section-label">System</div>
+        <div class="system-actions">
+          <button class="restart-btn" (click)="restartServer()">
+            <fa-icon [icon]="faPowerOff"></fa-icon>
+            Restart Server
+          </button>
+        </div>
+        </div>
+        </ng-template>  </div>
 
   <!-- Footer Section -->
   <div class="footer" *ngIf="!isSettingsOpen()">

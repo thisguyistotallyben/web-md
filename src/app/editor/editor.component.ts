@@ -7,6 +7,7 @@ import { Markdown } from '@tiptap/markdown';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { TiptapEditorDirective } from 'ngx-tiptap';
 import { FileService } from '../core/services/file.service';
+import { RealtimeService } from '../core/services/realtime.service';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faEllipsisV, faTrash, faFileAlt, faBold, faItalic, faHeading, faRemoveFormat, faQuoteRight, faCode } from '@fortawesome/free-solid-svg-icons';
@@ -25,6 +26,7 @@ const lowlight = createLowlight(all);
 })
 export class EditorComponent implements OnInit, OnDestroy {
   private fileService = inject(FileService);
+  private realtimeService = inject(RealtimeService);
 
   // Icons
   faEllipsisV = faEllipsisV;
@@ -47,11 +49,12 @@ export class EditorComponent implements OnInit, OnDestroy {
   displayFileName = computed(() => this.activeFileName().replace('.md', ''));
 
   private saveSubject = new Subject<string>();
+  private lastTypingTime = 0;
 
   editor = new Editor({
     extensions: [
       StarterKit.configure({
-        codeBlock: false, // Disable default code block to use lowlight
+        codeBlock: false,
       }),
       Markdown,
       CodeBlockLowlight.configure({
@@ -60,6 +63,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     ],
     content: '<h1>Welcome to WebMD</h1><p>Select a note from the sidebar to start editing.</p>',
     onUpdate: ({ editor }) => {
+      this.lastTypingTime = Date.now();
       const path = this.activeFilePath();
       console.log('Tiptap Update - Path:', path);
       if (path) {
@@ -75,6 +79,29 @@ export class EditorComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit() {
+    // Listen for remote updates
+    this.realtimeService.fileUpdated.subscribe(data => {
+      const currentPath = this.activeFilePath();
+      const timeSinceLastType = Date.now() - this.lastTypingTime;
+      
+      console.log('[Editor] Sync Check:', { 
+        currentPath, 
+        remotePath: data.path, 
+        timeSinceLastType 
+      });
+
+      // Only reload if it's the current file AND we aren't actively typing (1s buffer)
+      if (currentPath === data.path && timeSinceLastType > 1000) {
+        console.log('[Editor] Conditions met, reloading content from:', data.path);
+        this.fileService.read(data.path).subscribe(res => {
+          this.editor.commands.setContent(res.content, { 
+            emitUpdate: false, 
+            contentType: 'markdown' 
+          } as any);
+        });
+      }
+    });
+
     // Set up debounced autosave (save 500ms after last keystroke)
     this.saveSubject.pipe(
       debounceTime(500),
@@ -107,8 +134,6 @@ export class EditorComponent implements OnInit, OnDestroy {
         console.log('File Read Success - Length:', data.content.length);
         this.activeFilePath.set(filePath);
         this.activeFileName.set(filePath.split('/').pop() || 'Untitled');
-        // We don't want the initial load to trigger a save
-        // Standard signature for official @tiptap/markdown:
         this.editor.commands.setContent(data.content, { 
           emitUpdate: false, 
           contentType: 'markdown' 
@@ -136,7 +161,6 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.activeFilePath.set(newPath);
         this.activeFileName.set(newFileName);
         this.isRenaming.set(false);
-        // Refresh sidebar
         window.dispatchEvent(new CustomEvent('refresh-sidebar'));
       });
     } else {

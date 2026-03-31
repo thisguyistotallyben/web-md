@@ -27,6 +27,7 @@ $color-border: #222222;       // Thinner dividers
   --code-number: #dcdcaa;
   --code-title: #4ec9b0;
   --code-type: #9cdcfe;
+  --active-bg: rgba(255, 204, 0, 0.1);
 }
 
 body.theme-light {
@@ -37,6 +38,7 @@ body.theme-light {
   --text-main: #1a1a1a;
   --text-muted: #666666;
   --border-color: #e0e0e0;
+  --active-bg: rgba(184, 134, 11, 0.15);
 
   /* Light Code Colors */
   --code-comment: #008000;
@@ -55,6 +57,7 @@ body.theme-sepia {
   --text-main: #433422;
   --text-muted: #705e4c;
   --border-color: #dccba0;
+  --active-bg: rgba(139, 69, 19, 0.1);
 
   /* Sepia Code Colors */
   --code-comment: #a69e8a;
@@ -73,6 +76,7 @@ body.theme-high-contrast {
   --text-main: #000000;
   --text-muted: #333333;
   --border-color: #000000;
+  --active-bg: rgba(0, 0, 255, 0.1);
 
   /* HC Light Code Colors */
   --code-comment: #000000;
@@ -91,6 +95,7 @@ body.theme-dark-hc {
   --text-main: #ffffff;
   --text-muted: #aaaaaa;
   --border-color: #ffffff;
+  --active-bg: rgba(0, 255, 0, 0.15);
 
   /* HC Dark Code Colors */
   --code-comment: #aaaaaa;
@@ -109,6 +114,7 @@ body.theme-gruvbox {
   --text-main: #ebdbb2;
   --text-muted: #a89984;
   --border-color: #504945;
+  --active-bg: rgba(254, 128, 25, 0.15);
 
   /* Gruvbox Code Colors */
   --code-comment: #928374;

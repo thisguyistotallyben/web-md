@@ -1,11 +1,13 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { EditorComponent } from '../../editor/editor.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../core/services/modal.service';
+import { SystemService } from '../../core/services/system.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faBars, faChevronLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faChevronLeft, faPlus, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-main-layout',
@@ -14,23 +16,38 @@ import { faBars, faChevronLeft, faPlus } from '@fortawesome/free-solid-svg-icons
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.scss']
 })
-export class MainLayoutComponent {
+export class MainLayoutComponent implements OnDestroy {
   public modalService = inject(ModalService);
+  public systemService = inject(SystemService);
   
+  @ViewChild('modalInput') modalInput!: ElementRef<HTMLInputElement>;
+  private modalSub: Subscription;
+
   // Icons
   faBars = faBars;
   faChevronLeft = faChevronLeft;
   faPlus = faPlus;
+  faExclamationTriangle = faExclamationTriangle;
 
   isSidebarCollapsed = signal<boolean>(false);
   modalValue = signal<string>('');
 
-  toggleSidebar() {
-    this.isSidebarCollapsed.update(v => !v);
+  constructor() {
+    this.modalSub = this.modalService.opened.subscribe(() => {
+      this.modalValue.set(this.modalService.config()?.value || '');
+      if (this.modalInput) {
+        this.modalInput.nativeElement.focus();
+        this.modalInput.nativeElement.select();
+      }
+    });
   }
 
-  handleOpen() {
-    this.modalValue.set(this.modalService.config()?.value || '');
+  ngOnDestroy() {
+    this.modalSub.unsubscribe();
+  }
+
+  toggleSidebar() {
+    this.isSidebarCollapsed.update(v => !v);
   }
 
   confirm() {

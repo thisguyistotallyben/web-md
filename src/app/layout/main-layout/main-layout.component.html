@@ -11,6 +11,15 @@
     <app-editor></app-editor>
   </main>
 
+  <!-- Server Offline Overlay -->
+  <div class="system-overlay" *ngIf="!systemService.isServerOnline()">
+    <div class="overlay-card">
+      <fa-icon [icon]="faExclamationTriangle" class="warning-icon"></fa-icon>
+      <h3>Server Offline</h3>
+      <p>Connection lost. Attempting to reconnect...</p>
+    </div>
+  </div>
+
   <!-- Global Creation Modal -->
   <div class="modal-backdrop" *ngIf="modalService.isOpen()" (click)="modalService.close()">
     <div class="modal-content" (click)="$event.stopPropagation()">

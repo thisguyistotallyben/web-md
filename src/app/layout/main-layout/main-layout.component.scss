@@ -106,6 +106,42 @@
   }
 }
 
+/* System Overlay (Offline) */
+.system-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 20000; // Above modals
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+
+  .overlay-card {
+    text-align: center;
+    padding: 3rem;
+    
+    .warning-icon {
+      font-size: 3rem;
+      color: #ff9800;
+      margin-bottom: 1.5rem;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #ffffff;
+    }
+
+    p {
+      color: #aaaaaa;
+      font-size: 0.95rem;
+    }
+  }
+}
+
 /* Global Modal Styling */
 .modal-backdrop {
   position: fixed;

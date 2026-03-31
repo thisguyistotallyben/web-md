@@ -6,6 +6,7 @@ export interface FileItem {
   name: string;
   type: 'folder' | 'note';
   path: string;
+  childCount?: number;
   children?: FileItem[];
 }
 
@@ -37,5 +38,9 @@ export class FileService {
 
   delete(path: string): Observable<{ success: boolean }> {
     return this.http.post<{ success: boolean }>('/api/fs/delete', { path });
+  }
+
+  restartServer(): Observable<{ success: boolean }> {
+    return this.http.post<{ success: boolean }>('/api/system/restart', {});
   }
 }

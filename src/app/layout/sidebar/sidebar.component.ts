@@ -6,7 +6,7 @@ import { ThemeService, Theme } from '../../core/services/theme.service';
 import { MainLayoutComponent } from '../main-layout/main-layout.component';
 import { ModalService } from '../../core/services/modal.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faFolder, faFileAlt, faChevronLeft, faGear, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faFolder, faFileAlt, faChevronLeft, faGear, faPlus, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-sidebar',
@@ -27,6 +27,7 @@ export class SidebarComponent implements OnInit {
   faChevronLeft = faChevronLeft;
   faGear = faGear;
   faPlus = faPlus;
+  faPowerOff = faPowerOff;
 
   notebooks = signal<FileItem[]>([]);
   currentNotebook = signal<FileItem | null>(null);
@@ -182,5 +183,13 @@ export class SidebarComponent implements OnInit {
 
   setTheme(theme: Theme) {
     this.themeService.setTheme(theme);
+  }
+
+  restartServer() {
+    if (confirm('Are you sure you want to restart the server? Connection will be lost for a few seconds.')) {
+      this.fileService.restartServer().subscribe(() => {
+        setTimeout(() => window.location.reload(), 3000);
+      });
+    }
   }
 }

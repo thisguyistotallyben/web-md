@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { Subject } from 'rxjs';
 
 export interface ModalConfig {
   title: string;
@@ -13,10 +14,13 @@ export interface ModalConfig {
 export class ModalService {
   isOpen = signal<boolean>(false);
   config = signal<ModalConfig | null>(null);
+  opened = new Subject<void>();
 
   open(config: ModalConfig) {
     this.config.set(config);
     this.isOpen.set(true);
+    // Use setTimeout to ensure the DOM has rendered before emitting
+    setTimeout(() => this.opened.next(), 0);
   }
 
   close() {
