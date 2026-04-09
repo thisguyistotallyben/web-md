@@ -225,7 +225,9 @@ app.get('/api/system/heartbeat', (req, res) => {
 });
 
 // For all non-API requests, serve the index.html from the Angular browser directory
-app.get('*', (req, res) => {
+app.get('*all', (req, res) => {
+  // If the request is for an API or a file that might exist, don't serve index.html here
+  // express.static already handles existing files before this route
   if (!req.path.startsWith('/api')) {
     res.sendFile(path.join(BROWSER_DIR, 'index.html'));
   }
