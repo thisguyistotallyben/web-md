@@ -29,6 +29,10 @@ const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
 app.use(cors());
 app.use(bodyParser.json());
 
+// Serve static files from the Angular app
+const BROWSER_DIR = path.join(__dirname, 'dist', 'web-md', 'browser');
+app.use(express.static(BROWSER_DIR));
+
 // List files and folders
 app.get('/api/fs', async (req, res) => {
   try {
@@ -220,9 +224,16 @@ app.get('/api/system/heartbeat', (req, res) => {
   res.json({ online: true, timestamp: Date.now() });
 });
 
+// For all non-API requests, serve the index.html from the Angular browser directory
+app.get('*', (req, res) => {
+  if (!req.path.startsWith('/api')) {
+    res.sendFile(path.join(BROWSER_DIR, 'index.html'));
+  }
+});
+
 server.listen(PORT, '0.0.0.0', () => {
   console.log('====================================');
-  console.log(`WebMD Backend started!`);
+  console.log(`WebMD App & Backend started!`);
   console.log(`URL: http://localhost:${PORT}`);
   console.log(`Data Dir: ${DATA_DIR}`);
   console.log('====================================');
