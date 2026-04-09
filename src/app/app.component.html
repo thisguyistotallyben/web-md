@@ -1,2 +1,6 @@
-<app-auth *ngIf="!authService.isAuthenticated()"></app-auth>
-<app-main-layout *ngIf="authService.isAuthenticated()"></app-main-layout>
+@if (!authService.isAuthenticated()) {
+  <app-auth></app-auth>
+}
+@if (authService.isAuthenticated()) {
+  <app-main-layout></app-main-layout>
+}

@@ -12,33 +12,37 @@
   </main>
 
   <!-- Server Offline Overlay -->
-  <div class="system-overlay" *ngIf="!systemService.isServerOnline()">
-    <div class="overlay-card">
-      <fa-icon [icon]="faExclamationTriangle" class="warning-icon"></fa-icon>
-      <h3>Server Offline</h3>
-      <p>Connection lost. Attempting to reconnect...</p>
+  @if (!systemService.isServerOnline()) {
+    <div class="system-overlay">
+      <div class="overlay-card">
+        <fa-icon [icon]="faExclamationTriangle" class="warning-icon"></fa-icon>
+        <h3>Server Offline</h3>
+        <p>Connection lost. Attempting to reconnect...</p>
+      </div>
     </div>
-  </div>
+  }
 
   <!-- Global Creation Modal -->
-  <div class="modal-backdrop" *ngIf="modalService.isOpen()" (click)="modalService.close()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <div class="modal-header">{{ modalService.config()?.title }}</div>
-      <div class="modal-body">
-        <input 
-          #modalInput
-          type="text" 
-          [ngModel]="modalService.config()?.value" 
-          (ngModelChange)="modalValue.set($event)"
-          [placeholder]="modalService.config()?.placeholder || ''" 
-          (keydown.enter)="confirm()"
-          (keydown.escape)="modalService.close()"
-          autofocus>
-      </div>
-      <div class="modal-footer">
-        <button class="cancel-btn" (click)="modalService.close()">Cancel</button>
-        <button class="confirm-btn" (click)="confirm()" [disabled]="!modalValue().trim()">Create</button>
+  @if (modalService.isOpen()) {
+    <div class="modal-backdrop" (click)="modalService.close()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">{{ modalService.config()?.title }}</div>
+        <div class="modal-body">
+          <input
+            #modalInput
+            type="text"
+            [ngModel]="modalService.config()?.value"
+            (ngModelChange)="modalValue.set($event)"
+            [placeholder]="modalService.config()?.placeholder || ''"
+            (keydown.enter)="confirm()"
+            (keydown.escape)="modalService.close()"
+            autofocus>
+        </div>
+        <div class="modal-footer">
+          <button class="cancel-btn" (click)="modalService.close()">Cancel</button>
+          <button class="confirm-btn" (click)="confirm()" [disabled]="!modalValue().trim()">Create</button>
+        </div>
       </div>
     </div>
-  </div>
+  }
 </div>

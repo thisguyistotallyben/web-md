@@ -1,5 +1,5 @@
 import { Component, signal, computed, inject, OnInit, HostListener } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { FileService, FileItem } from '../../core/services/file.service';
 import { ThemeService, Theme } from '../../core/services/theme.service';
@@ -11,7 +11,7 @@ import { faFolder, faFileAlt, faChevronLeft, faGear, faPlus, faPowerOff } from '
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, FormsModule, FontAwesomeModule],
+  imports: [FormsModule, FontAwesomeModule],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })

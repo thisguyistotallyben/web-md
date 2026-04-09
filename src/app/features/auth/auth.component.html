@@ -3,7 +3,7 @@
     <div class="logo-section">
       <span class="logo"><span class="brand-web">Web</span>MD</span>
     </div>
-    
+
     <h2>Welcome Back</h2>
     <p class="subtitle">Please sign in to access your notes</p>
 
@@ -12,12 +12,12 @@
         <label>Username</label>
         <div class="input-wrapper">
           <fa-icon [icon]="faUser" class="input-icon"></fa-icon>
-          <input 
-            type="text" 
-            [(ngModel)]="username" 
-            name="username" 
-            placeholder="admin" 
-            required 
+          <input
+            type="text"
+            [(ngModel)]="username"
+            name="username"
+            placeholder="admin"
+            required
             autofocus>
         </div>
       </div>
@@ -26,18 +26,20 @@
         <label>Password</label>
         <div class="input-wrapper">
           <fa-icon [icon]="faLock" class="input-icon"></fa-icon>
-          <input 
-            type="password" 
-            [(ngModel)]="password" 
-            name="password" 
-            placeholder="••••••••" 
+          <input
+            type="password"
+            [(ngModel)]="password"
+            name="password"
+            placeholder="••••••••"
             required>
         </div>
       </div>
 
-      <div class="error-message" *ngIf="error()">
-        {{ error() }}
-      </div>
+      @if (error()) {
+        <div class="error-message">
+          {{ error() }}
+        </div>
+      }
 
       <button type="submit" class="login-btn">Sign In</button>
     </form>

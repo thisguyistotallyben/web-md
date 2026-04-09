@@ -1,5 +1,5 @@
 import { Component, OnDestroy, ViewEncapsulation, signal, computed, inject, HostListener, OnInit, effect, ElementRef, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
@@ -20,7 +20,7 @@ const lowlight = createLowlight(all);
 @Component({
   selector: 'app-editor',
   standalone: true,
-  imports: [CommonModule, FormsModule, TiptapEditorDirective, FontAwesomeModule],
+  imports: [FormsModule, TiptapEditorDirective, FontAwesomeModule],
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
   encapsulation: ViewEncapsulation.None,

@@ -1,56 +1,64 @@
 <div class="editor-container">
   <div class="editor-header">
     <div class="note-info">
-      <span *ngIf="!isRenaming()" class="note-title" (click)="startRename()">{{ displayFileName() }}</span>
-      <input 
-        #renameInput
-        *ngIf="isRenaming()" 
-        class="rename-input" 
-        [value]="displayFileName()" 
-        (blur)="finishRename(renameInput.value)"
-        (keydown)="handleRenameKeydown($event, renameInput)"
-        autofocus>
+      @if (!isRenaming()) {
+        <span class="note-title" (click)="startRename()">{{ displayFileName() }}</span>
+      }
+      @if (isRenaming()) {
+        <input
+          #renameInput
+          class="rename-input"
+          [value]="displayFileName()"
+          (blur)="finishRename(renameInput.value)"
+          (keydown)="handleRenameKeydown($event, renameInput)"
+          autofocus>
+      }
       <span class="save-indicator" [class.visible]="isSaving()">Saving...</span>
     </div>
 
-    <div class="actions" *ngIf="activeFilePath()">
-      <button class="action-menu-btn" (click)="isActionMenuOpen.set(!isActionMenuOpen())" [class.active]="isActionMenuOpen()">
-        <fa-icon [icon]="faEllipsisV"></fa-icon>
-      </button>
-
-      <!-- Action Menu Popup -->
-      <div class="action-popup" *ngIf="isActionMenuOpen()">
-        <button class="delete-btn" (click)="deleteActiveNote()">
-          <fa-icon [icon]="faTrash"></fa-icon>
-          Delete Note
+    @if (activeFilePath()) {
+      <div class="actions">
+        <button class="action-menu-btn" (click)="isActionMenuOpen.set(!isActionMenuOpen())" [class.active]="isActionMenuOpen()">
+          <fa-icon [icon]="faEllipsisV"></fa-icon>
         </button>
+        <!-- Action Menu Popup -->
+        @if (isActionMenuOpen()) {
+          <div class="action-popup">
+            <button class="delete-btn" (click)="deleteActiveNote()">
+              <fa-icon [icon]="faTrash"></fa-icon>
+              Delete Note
+            </button>
+          </div>
+        }
       </div>
-    </div>
+    }
   </div>
 
-  <div class="editor-toolbar" *ngIf="activeFilePath()">
-    <button (click)="toggleBold()" [class.active]="editor.isActive('bold')" title="Bold">
-      <fa-icon [icon]="faBold"></fa-icon>
-    </button>
-    <button (click)="toggleItalic()" [class.active]="editor.isActive('italic')" title="Italic">
-      <fa-icon [icon]="faItalic"></fa-icon>
-    </button>
-    <div class="divider"></div>
-    <button (click)="toggleHeading(1)" [class.active]="editor.isActive('heading', { level: 1 })" title="Heading 1">H1</button>
-    <button (click)="toggleHeading(2)" [class.active]="editor.isActive('heading', { level: 2 })" title="Heading 2">H2</button>
-    <button (click)="toggleHeading(3)" [class.active]="editor.isActive('heading', { level: 3 })" title="Heading 3">H3</button>
-    <div class="divider"></div>
-    <button (click)="toggleBlockquote()" [class.active]="editor.isActive('blockquote')" title="Quote">
-      <fa-icon [icon]="faQuoteRight"></fa-icon>
-    </button>
-    <button (click)="toggleCodeBlock()" [class.active]="editor.isActive('codeBlock')" title="Code Block">
-      <fa-icon [icon]="faCode"></fa-icon>
-    </button>
-    <div class="divider"></div>
-    <button (click)="clearFormatting()" title="Clear Formatting">
-      <fa-icon [icon]="faRemoveFormat"></fa-icon>
-    </button>
-  </div>
+  @if (activeFilePath()) {
+    <div class="editor-toolbar">
+      <button (click)="toggleBold()" [class.active]="editor.isActive('bold')" title="Bold">
+        <fa-icon [icon]="faBold"></fa-icon>
+      </button>
+      <button (click)="toggleItalic()" [class.active]="editor.isActive('italic')" title="Italic">
+        <fa-icon [icon]="faItalic"></fa-icon>
+      </button>
+      <div class="divider"></div>
+      <button (click)="toggleHeading(1)" [class.active]="editor.isActive('heading', { level: 1 })" title="Heading 1">H1</button>
+      <button (click)="toggleHeading(2)" [class.active]="editor.isActive('heading', { level: 2 })" title="Heading 2">H2</button>
+      <button (click)="toggleHeading(3)" [class.active]="editor.isActive('heading', { level: 3 })" title="Heading 3">H3</button>
+      <div class="divider"></div>
+      <button (click)="toggleBlockquote()" [class.active]="editor.isActive('blockquote')" title="Quote">
+        <fa-icon [icon]="faQuoteRight"></fa-icon>
+      </button>
+      <button (click)="toggleCodeBlock()" [class.active]="editor.isActive('codeBlock')" title="Code Block">
+        <fa-icon [icon]="faCode"></fa-icon>
+      </button>
+      <div class="divider"></div>
+      <button (click)="clearFormatting()" title="Clear Formatting">
+        <fa-icon [icon]="faRemoveFormat"></fa-icon>
+      </button>
+    </div>
+  }
 
   <div class="editor-body" #editorBody>
     <tiptap-editor [editor]="editor"></tiptap-editor>

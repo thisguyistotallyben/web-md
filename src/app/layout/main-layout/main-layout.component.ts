@@ -1,7 +1,7 @@
 import { Component, signal, inject, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { EditorComponent } from '../../editor/editor.component';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../core/services/modal.service';
 import { SystemService } from '../../core/services/system.service';
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarComponent, EditorComponent, FontAwesomeModule],
+  imports: [FormsModule, SidebarComponent, EditorComponent, FontAwesomeModule],
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.scss']
 })
