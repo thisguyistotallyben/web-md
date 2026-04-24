@@ -17,9 +17,6 @@ const io = new Server(server, {
 });
 
 // Authentication configuration (managed via auth.json)
-const TOKEN_EXPIRY_MS = 3600000; // 1 hour
-const validTokens = new Map();
-
 // Helper to clean up expired tokens
 const cleanupTokens = () => {
   const now = Date.now();
