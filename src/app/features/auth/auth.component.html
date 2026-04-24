@@ -5,23 +5,9 @@
     </div>
 
     <h2>Welcome Back</h2>
-    <p class="subtitle">Please sign in to access your notes</p>
+    <p class="subtitle">Please enter your password to access your notes</p>
 
     <form (submit)="onLogin(); $event.preventDefault()">
-      <div class="form-group">
-        <label>Username</label>
-        <div class="input-wrapper">
-          <fa-icon [icon]="faUser" class="input-icon"></fa-icon>
-          <input
-            type="text"
-            [(ngModel)]="username"
-            name="username"
-            placeholder="admin"
-            required
-            autofocus>
-        </div>
-      </div>
-
       <div class="form-group">
         <label>Password</label>
         <div class="input-wrapper">
@@ -31,7 +17,8 @@
             [(ngModel)]="password"
             name="password"
             placeholder="••••••••"
-            required>
+            required
+            autofocus>
         </div>
       </div>
 

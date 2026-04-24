@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { SidebarComponent } from './sidebar.component';
+import { MainLayoutComponent } from '../main-layout/main-layout.component';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
@@ -8,7 +10,12 @@ describe('SidebarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SidebarComponent]
+      imports: [SidebarComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        MainLayoutComponent
+      ]
     })
     .compileComponents();
 

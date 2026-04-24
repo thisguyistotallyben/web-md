@@ -3,7 +3,7 @@ import { Component, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faLock } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-auth',
@@ -15,17 +15,17 @@ import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 export class AuthComponent {
   private authService = inject(AuthService);
 
-  username = signal<string>('');
   password = signal<string>('');
   error = signal<string | null>(null);
 
   faLock = faLock;
-  faUser = faUser;
 
   onLogin() {
-    const success = this.authService.login(this.username(), this.password());
-    if (!success) {
-      this.error.set('Invalid username or password');
-    }
+    this.error.set(null);
+    this.authService.login(this.password()).subscribe({
+      error: (err) => {
+        this.error.set('Invalid password');
+      }
+    });
   }
 }

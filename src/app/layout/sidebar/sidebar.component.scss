@@ -103,14 +103,70 @@
 
   .system-actions {
     padding: 0.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
     
-    .restart-btn {
+    .password-change-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding: 1rem;
+      background-color: var(--bg-well);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+
+      .form-title {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .settings-input {
+        width: 100%;
+        background-color: var(--bg-deep);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 0.5rem 0.75rem;
+        border-radius: var(--radius-sm);
+        font-family: inherit;
+        font-size: 0.85rem;
+        outline: none;
+
+        &:focus {
+          border-color: var(--accent);
+        }
+      }
+
+      .settings-error {
+        font-size: 0.75rem;
+        color: #ff4444;
+      }
+
+      .settings-success {
+        font-size: 0.75rem;
+        color: #00c851;
+      }
+
+      .action-btn.small {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+      }
+    }
+
+    .system-danger-zone {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .restart-btn, .logout-btn {
       width: 100%;
       padding: 0.75rem;
-      background-color: rgba(255, 68, 68, 0.1);
-      color: #ff4444;
-      border: 1px solid rgba(255, 68, 68, 0.2);
-      border-radius: var(--radius-md);
       font-family: inherit;
       font-weight: 600;
       font-size: 0.85rem;
@@ -120,11 +176,30 @@
       justify-content: center;
       gap: 0.75rem;
       transition: all 0.2s;
+      border-radius: var(--radius-md);
+    }
+
+    .restart-btn {
+      background-color: rgba(255, 68, 68, 0.1);
+      color: #ff4444;
+      border: 1px solid rgba(255, 68, 68, 0.2);
 
       &:hover {
         background-color: #ff4444;
         color: #ffffff;
         border-color: #ff4444;
+      }
+    }
+
+    .logout-btn {
+      background-color: var(--bg-well);
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+
+      &:hover {
+        background-color: var(--active-bg);
+        color: var(--text-main);
+        border-color: var(--accent);
       }
     }
   }

@@ -3,10 +3,11 @@ import { Component, signal, computed, inject, OnInit, HostListener } from '@angu
 import { FormsModule } from '@angular/forms';
 import { FileService, FileItem } from '../../core/services/file.service';
 import { ThemeService, Theme } from '../../core/services/theme.service';
+import { AuthService } from '../../core/services/auth.service';
 import { MainLayoutComponent } from '../main-layout/main-layout.component';
 import { ModalService } from '../../core/services/modal.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faFolder, faFileAlt, faChevronLeft, faGear, faPlus, faPowerOff } from '@fortawesome/free-solid-svg-icons';
+import { faFolder, faFileAlt, faChevronLeft, faGear, faPlus, faPowerOff, faLock } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,6 +19,7 @@ import { faFolder, faFileAlt, faChevronLeft, faGear, faPlus, faPowerOff } from '
 export class SidebarComponent implements OnInit {
   private fileService = inject(FileService);
   public themeService = inject(ThemeService);
+  private authService = inject(AuthService);
   private layout = inject(MainLayoutComponent);
   private modalService = inject(ModalService);
 
@@ -28,6 +30,7 @@ export class SidebarComponent implements OnInit {
   faGear = faGear;
   faPlus = faPlus;
   faPowerOff = faPowerOff;
+  faLock = faLock;
 
   notebooks = signal<FileItem[]>([]);
   currentNotebook = signal<FileItem | null>(null);
@@ -36,6 +39,12 @@ export class SidebarComponent implements OnInit {
   
   isRenaming = signal<boolean>(false);
   isSettingsOpen = signal<boolean>(false);
+
+  // Password Change State
+  oldPassword = signal<string>('');
+  newPassword = signal<string>('');
+  passwordError = signal<string | null>(null);
+  passwordSuccess = signal<boolean>(false);
 
   currentItems = signal<FileItem[]>([]);
 
@@ -190,6 +199,34 @@ export class SidebarComponent implements OnInit {
       this.fileService.restartServer().subscribe(() => {
         setTimeout(() => window.location.reload(), 3000);
       });
+    }
+  }
+
+  onChangePassword() {
+    this.passwordError.set(null);
+    this.passwordSuccess.set(false);
+
+    if (!this.oldPassword() || !this.newPassword()) {
+      this.passwordError.set('All fields are required');
+      return;
+    }
+
+    this.authService.changePassword(this.oldPassword(), this.newPassword()).subscribe({
+      next: () => {
+        this.passwordSuccess.set(true);
+        this.oldPassword.set('');
+        this.newPassword.set('');
+        setTimeout(() => this.passwordSuccess.set(false), 3000);
+      },
+      error: (err) => {
+        this.passwordError.set(err.error?.error || 'Failed to change password');
+      }
+    });
+  }
+
+  logout() {
+    if (confirm('Are you sure you want to log out?')) {
+      this.authService.logout();
     }
   }
 }

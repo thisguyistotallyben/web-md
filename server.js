@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs/promises');
 const path = require('path');
 const http = require('http');
+const crypto = require('crypto');
 const { Server } = require('socket.io');
 
 const app = express();
@@ -15,6 +16,40 @@ const io = new Server(server, {
   }
 });
 
+// Authentication configuration (managed via auth.json)
+const TOKEN_EXPIRY_MS = 3600000; // 1 hour
+const validTokens = new Map();
+
+// Helper to clean up expired tokens
+const cleanupTokens = () => {
+  const now = Date.now();
+  for (const [token, expiry] of validTokens.entries()) {
+    if (now > expiry) {
+      validTokens.delete(token);
+    }
+  }
+};
+
+// Authentication Middleware
+const requireAuth = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const token = authHeader.split(' ')[1];
+  const expiry = validTokens.get(token);
+
+  if (!expiry || Date.now() > expiry) {
+    if (expiry) validTokens.delete(token);
+    return res.status(401).json({ error: 'Session expired' });
+  }
+
+  // Refresh expiry on successful use (optional, but requested "keep logged in for a nominal period")
+  validTokens.set(token, Date.now() + TOKEN_EXPIRY_MS);
+  next();
+};
+
 io.on('connection', (socket) => {
   console.log(`[Realtime] Client connected: ${socket.id}`);
   socket.on('disconnect', () => {
@@ -25,16 +60,66 @@ io.on('connection', (socket) => {
 const PORT = 3000;
 const DATA_DIR = path.join(__dirname, 'data');
 const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
+const AUTH_FILE = path.join(DATA_DIR, 'auth.json');
 
-app.use(cors());
-app.use(bodyParser.json());
+// Authentication configuration
+const DEFAULT_PASSWORD = 'admin';
+let ADMIN_PASSWORD = DEFAULT_PASSWORD;
+const TOKEN_EXPIRY_MS = 3600000; // 1 hour
+const validTokens = new Map();
 
-// Serve static files from the Angular app
-const BROWSER_DIR = path.join(__dirname, 'dist', 'web-md', 'browser');
-app.use(express.static(BROWSER_DIR));
+// Load password from file
+const loadPassword = async () => {
+  try {
+    const data = await fs.readFile(AUTH_FILE, 'utf-8');
+    const auth = JSON.parse(data);
+    ADMIN_PASSWORD = auth.password || DEFAULT_PASSWORD;
+    console.log('[Auth] Password loaded from file');
+  } catch (e) {
+    console.log('[Auth] No auth file found, using default');
+    try {
+      await fs.mkdir(DATA_DIR, { recursive: true });
+      await fs.writeFile(AUTH_FILE, JSON.stringify({ password: DEFAULT_PASSWORD }, null, 2), 'utf-8');
+    } catch (err) {
+      console.error('[Auth] Failed to create default auth file:', err);
+    }
+  }
+};
+
+loadPassword();
+
+// Auth Endpoints
+app.post('/api/auth/login', (req, res) => {
+  const { password } = req.body;
+  if (password === ADMIN_PASSWORD) {
+    const token = crypto.randomBytes(32).toString('hex');
+    const expiry = Date.now() + TOKEN_EXPIRY_MS;
+    validTokens.set(token, expiry);
+    cleanupTokens();
+    res.json({ token, expiry });
+  } else {
+    res.status(401).json({ error: 'Invalid password' });
+  }
+});
+
+app.post('/api/auth/change-password', requireAuth, async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  if (oldPassword === ADMIN_PASSWORD) {
+    try {
+      ADMIN_PASSWORD = newPassword;
+      await fs.writeFile(AUTH_FILE, JSON.stringify({ password: newPassword }, null, 2), 'utf-8');
+      console.log('[Auth] Password updated and saved');
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to save new password' });
+    }
+  } else {
+    res.status(401).json({ error: 'Invalid old password' });
+  }
+});
 
 // List files and folders
-app.get('/api/fs', async (req, res) => {
+app.get('/api/fs', requireAuth, async (req, res) => {
   try {
     const relativePath = req.query.path || '';
     const targetDir = path.join(DATA_DIR, relativePath);
@@ -79,7 +164,7 @@ app.get('/api/fs', async (req, res) => {
 });
 
 // Read file content
-app.get('/api/fs/read', async (req, res) => {
+app.get('/api/fs/read', requireAuth, async (req, res) => {
   try {
     const filePath = path.join(DATA_DIR, req.query.path);
     if (!filePath.startsWith(DATA_DIR)) return res.status(403).json({ error: 'Forbidden' });
@@ -92,7 +177,7 @@ app.get('/api/fs/read', async (req, res) => {
 });
 
 // Write file content
-app.post('/api/fs/write', async (req, res) => {
+app.post('/api/fs/write', requireAuth, async (req, res) => {
   try {
     const filePath = path.join(DATA_DIR, req.body.path);
     if (!filePath.startsWith(DATA_DIR)) return res.status(403).json({ error: 'Forbidden' });
@@ -110,7 +195,7 @@ app.post('/api/fs/write', async (req, res) => {
 });
 
 // Create file or folder
-app.post('/api/fs/create', async (req, res) => {
+app.post('/api/fs/create', requireAuth, async (req, res) => {
   try {
     const { name, type, parentPath = '' } = req.body;
     const targetPath = path.join(DATA_DIR, parentPath, name);
@@ -137,7 +222,7 @@ app.post('/api/fs/create', async (req, res) => {
 });
 
 // Rename file or folder
-app.post('/api/fs/rename', async (req, res) => {
+app.post('/api/fs/rename', requireAuth, async (req, res) => {
   try {
     const { oldPath, newName } = req.body;
     const oldFullPath = path.join(DATA_DIR, oldPath);
@@ -159,7 +244,7 @@ app.post('/api/fs/rename', async (req, res) => {
 });
 
 // Delete file or folder
-app.post('/api/fs/delete', async (req, res) => {
+app.post('/api/fs/delete', requireAuth, async (req, res) => {
   try {
     const { path: targetPath } = req.body;
     const fullPath = path.join(DATA_DIR, targetPath);
@@ -179,7 +264,7 @@ app.post('/api/fs/delete', async (req, res) => {
 });
 
 // Settings Endpoints
-app.get('/api/settings', async (req, res) => {
+app.get('/api/settings', requireAuth, async (req, res) => {
   try {
     try {
       const data = await fs.readFile(SETTINGS_FILE, 'utf-8');
@@ -193,7 +278,7 @@ app.get('/api/settings', async (req, res) => {
   }
 });
 
-app.post('/api/settings', async (req, res) => {
+app.post('/api/settings', requireAuth, async (req, res) => {
   try {
     await fs.writeFile(SETTINGS_FILE, JSON.stringify(req.body, null, 2), 'utf-8');
     console.log('[Settings] Updated and saved');
@@ -208,7 +293,7 @@ app.post('/api/settings', async (req, res) => {
 });
 
 // System Endpoints
-app.post('/api/system/restart', async (req, res) => {
+app.post('/api/system/restart', requireAuth, async (req, res) => {
   res.json({ success: true, message: 'Server is restarting...' });
   console.log('[System] Restart requested. Touching server.js...');
   

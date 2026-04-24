@@ -117,10 +117,43 @@
         </div>
         <div class="section-label">System</div>
         <div class="system-actions">
-          <button class="restart-btn" (click)="restartServer()">
-            <fa-icon [icon]="faPowerOff"></fa-icon>
-            Restart Server
-          </button>
+          <div class="password-change-form">
+            <div class="form-title">
+              <fa-icon [icon]="faLock"></fa-icon>
+              Change Password
+            </div>
+            
+            <input type="password" 
+                   [(ngModel)]="oldPassword" 
+                   placeholder="Current Password"
+                   class="settings-input">
+            
+            <input type="password" 
+                   [(ngModel)]="newPassword" 
+                   placeholder="New Password"
+                   class="settings-input">
+
+            @if (passwordError()) {
+              <div class="settings-error">{{ passwordError() }}</div>
+            }
+            @if (passwordSuccess()) {
+              <div class="settings-success">Password updated!</div>
+            }
+
+            <button class="action-btn small" (click)="onChangePassword()">Update Password</button>
+          </div>
+
+          <div class="system-danger-zone">
+            <button class="restart-btn" (click)="restartServer()">
+              <fa-icon [icon]="faPowerOff"></fa-icon>
+              Restart Server
+            </button>
+            
+            <button class="logout-btn" (click)="logout()">
+              <fa-icon [icon]="faPowerOff"></fa-icon>
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     }
