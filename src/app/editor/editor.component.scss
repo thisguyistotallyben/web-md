@@ -8,11 +8,7 @@
 
   &.header-collapsed {
     @media (max-width: 768px) {
-      .editor-header {
-        margin-top: -60px;
-        opacity: 0;
-        pointer-events: none;
-      }
+      .editor-header { margin-top: -60px; opacity: 0; pointer-events: none; }
     }
   }
 }
@@ -24,33 +20,31 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--border-color);
-  background-color: var(--bg-well); // Darker than deep
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--bg-well);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   z-index: 10;
-  transition: margin-top 0.3s ease, opacity 0.3s ease;
+  transition: margin-top .3s, opacity .3s;
 
-  @media (max-width: 768px) {
-    padding: 0 1rem 0 4rem;
-  }
+  @media (max-width: 768px) { padding: 0 1rem 0 4rem; }
 
   .note-info {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: .75rem;
     overflow: hidden;
-    .note-icon { opacity: 0.6; flex-shrink: 0; }
+    .note-icon { opacity: .6; flex-shrink: 0; }
     .note-title { 
       font-weight: 500; 
-      color: var(--text-main); // Brighter for better visibility
-      font-size: 0.95rem;
+      color: var(--text-main);
+      font-size: .95rem;
       cursor: pointer;
       padding: 2px 4px;
       border-radius: var(--radius-sm);
-      transition: background-color 0.2s;
+      transition: background-color .2s;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      &:hover { background-color: rgba(255, 255, 255, 0.05); color: var(--text-main); }
+      &:hover { background-color: rgba(255,255,255,.05); }
     }
     .rename-input {
       background-color: var(--bg-surface);
@@ -58,50 +52,48 @@
       color: var(--text-main);
       padding: 2px 4px;
       border-radius: var(--radius-sm);
-      font-family: inherit;
-      font-size: 0.95rem;
+      font: inherit;
+      font-size: .95rem;
       font-weight: 500;
       outline: none;
       width: 150px;
     }
     .save-indicator {
-      font-size: 0.75rem;
+      font-size: .75rem;
       color: var(--accent);
       opacity: 0;
-      transition: opacity 0.3s;
+      transition: opacity .3s;
       margin-left: 1rem;
       font-weight: 500;
       white-space: nowrap;
-      &.visible { opacity: 0.8; }
+      &.visible { opacity: .8; }
     }
   }
 
   .actions {
     display: flex;
     align-items: center;
-    position: relative;
-    gap: 0.5rem;
+    gap: .5rem;
 
     .action-menu-btn, .toolbar-toggle-btn, .raw-toggle-btn {
       background: none;
       border: none;
       color: var(--text-muted);
       cursor: pointer;
-      padding: 0.5rem;
+      padding: .5rem;
       font-size: 1.2rem;
       display: flex;
       align-items: center;
       border-radius: var(--radius-sm);
-      transition: all 0.2s;
-      gap: 0.5rem;
-      &:hover, &.active { background-color: rgba(255, 255, 255, 0.05); color: var(--text-main); }
+      transition: all .2s;
+      gap: .5rem;
+      &:hover, &.active { background-color: rgba(255,255,255,.05); color: var(--text-main); }
       &.active { color: var(--accent); }
-
       .btn-label {
-        font-size: 0.75rem;
+        font-size: .75rem;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: .05em;
         @media (max-width: 480px) { display: none; }
       }
     }
@@ -121,20 +113,19 @@
   line-height: 1.6;
   resize: none;
   outline: none;
-  padding: 0;
 }
 
 .editor-toolbar {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 4rem;
+  gap: .5rem;
+  padding: .5rem 4rem;
   background-color: var(--bg-surface);
   border-bottom: 1px solid var(--border-color);
   min-height: 44px;
 
   @media (max-width: 768px) {
-    padding: 0.5rem 1rem;
+    padding: .5rem 1rem;
     overflow-x: auto;
   }
 
@@ -142,34 +133,27 @@
     background: none;
     border: 1px solid transparent;
     color: var(--text-muted);
-    padding: 0.25rem 0.6rem;
+    padding: .25rem .6rem;
     border-radius: var(--radius-sm);
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: .85rem;
     font-weight: 600;
-    transition: all 0.2s;
+    transition: all .2s;
     display: flex;
     align-items: center;
     justify-content: center;
     min-width: 32px;
     height: 32px;
 
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.05);
-      color: var(--text-main);
-    }
-
-    &.active {
-      background-color: rgba(255, 204, 0, 0.1);
-      color: var(--accent);
-    }
+    &:hover { background-color: rgba(255,255,255,.05); color: var(--text-main); }
+    &.active { background-color: rgba(255,204,0,.1); color: var(--accent); }
   }
 
   .divider {
     width: 1px;
     height: 20px;
     background-color: var(--border-color);
-    margin: 0 0.25rem;
+    margin: 0 .25rem;
   }
 }
 
@@ -187,23 +171,21 @@
 
   button {
     width: 100%;
-    padding: 0.75rem 1rem;
+    padding: .75rem 1rem;
     background: none;
     border: none;
     color: var(--text-muted);
     text-align: left;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: .9rem;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    transition: all 0.2s;
-
-    &:hover { background-color: rgba(255, 255, 255, 0.03); color: var(--text-main); }
-
+    gap: .75rem;
+    transition: all .2s;
+    &:hover { background-color: rgba(255,255,255,.03); color: var(--text-main); }
     &.delete-btn {
-      color: #ff4444;
-      &:hover { background-color: rgba(255, 68, 68, 0.1); }
+      color: #f44;
+      &:hover { background-color: rgba(255,68,68,.1); }
     }
   }
 }
@@ -217,9 +199,7 @@
   touch-action: pan-y;
   display: flex;
   flex-direction: column;
-  
-  // Safe-area scrolling
-  scroll-padding-top: 100px; // Keep text well below header when auto-scrolling
+  scroll-padding-top: 100px;
   scroll-padding-bottom: calc(2rem + var(--keyboard-height, 0px));
   padding-bottom: calc(3rem + var(--keyboard-height, 0px));
 
@@ -229,97 +209,71 @@
   }
 }
 
-.keyboard-spacer {
-  display: none; // Removing physical spacer in favor of clean padding
-}
-
 .tiptap {
   outline: none;
   line-height: 1.7;
   font-size: 17px;
   color: var(--text-main);
-  font-family: 'Noto Serif', 'Georgia', 'Times New Roman', Times, serif;
+  font-family: 'Noto Serif', serif;
   flex: 1;
-  min-height: 100%; // Ensure editor is always at least as tall as the viewport
+  min-height: 100%;
   max-width: 850px;
   margin: 0 auto;
 
-  > * + * {
-    margin-top: 1.25rem;
-  }
-
-  p {
-    margin-bottom: 1rem;
-  }
+  > * + * { margin-top: 1.25rem; }
+  p { margin-bottom: 1rem; }
 
   h1, h2, h3, h4, h5, h6 {
     line-height: 1.3;
     font-weight: 600;
-    margin-top: 2rem;
-    margin-bottom: 0.75rem;
+    margin: 2rem 0 .75rem;
     color: var(--text-main);
-    font-family: 'Noto Serif', 'Georgia', 'Times New Roman', Times, serif;
+    font-family: 'Noto Serif', serif;
   }
 
   h1 { 
     font-size: 1.8rem; 
     border-bottom: 1px solid var(--border-color); 
     box-shadow: 0 2px 0 0 var(--bg-deep), 0 3px 0 0 var(--border-color);
-    padding-bottom: 0.4rem; 
+    padding-bottom: .4rem; 
     margin-top: 1rem;
     font-weight: 500;
   }
 
   h2 { 
     font-size: 1.25rem; 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
-    padding-bottom: 0.2rem; 
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    border-bottom: 1px solid rgba(255,255,255,.1); 
+    padding-bottom: .2rem; 
   }
 
-  h3 { 
-    font-size: 1.15rem;
-    font-weight: 600;
-    margin-top: 1.5rem;
-  }
-
+  h3 { font-size: 1.15rem; margin-top: 1.5rem; }
   h4 { font-size: 1.05rem; }
 
   ul, ol {
     padding-left: 2.5rem;
     margin-bottom: 1.5rem;
-    
     li {
-      margin-bottom: 0.75rem;
-      
-      > p { 
-        margin-bottom: 0.5rem; 
-        display: inline; // Keep first line with bullet
-      }
-
-      ul, ol {
-        margin-top: 0.75rem;
-        margin-bottom: 0.75rem;
-      }
+      margin-bottom: .75rem;
+      > p { display: inline; }
+      ul, ol { margin: .75rem 0; }
     }
   }
 
   blockquote {
     border-left: 3px solid var(--accent);
     margin: 2rem 0;
-    padding: 0.5rem 1.5rem;
+    padding: .5rem 1.5rem;
     color: var(--text-muted);
     font-style: italic;
     p { margin: 0; }
   }
 
   code {
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-    background-color: rgba(255, 255, 255, 0.08);
-    padding: 0.15em 0.4em;
+    font-family: monospace;
+    background: rgba(255,255,255,.08);
+    padding: .15em .4em;
     border-radius: var(--radius-sm);
-    font-size: 0.85em;
+    font-size: .85em;
     color: var(--accent);
   }
 
@@ -329,18 +283,11 @@
     border-radius: var(--radius-md);
     overflow-x: auto;
     border: 1px solid var(--border-color);
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-family: monospace;
     line-height: 1.5;
     margin: 2rem 0;
+    code { background: transparent; padding: 0; color: inherit; font-size: .9em; }
 
-    code {
-      background-color: transparent;
-      padding: 0;
-      color: inherit;
-      font-size: 0.9em;
-    }
-
-    /* Syntax Highlighting Colors - Theme Aware */
     .hljs-comment, .hljs-quote { color: var(--code-comment); font-style: italic; }
     .hljs-keyword, .hljs-selector-tag, .hljs-addition { color: var(--code-keyword); }
     .hljs-number, .hljs-string, .hljs-meta .hljs-meta-string, .hljs-literal, .hljs-doctag, .hljs-regexp { color: var(--code-string); }
@@ -348,27 +295,17 @@
     .hljs-attribute, .hljs-attr, .hljs-variable, .hljs-template-variable, .hljs-class .hljs-title, .hljs-type { color: var(--code-type); }
     .hljs-symbol, .hljs-bullet, .hljs-subst, .hljs-meta, .hljs-link { color: var(--code-number); }
     .hljs-built_in, .hljs-deletion { color: #e53935; }
-    .hljs-formula { background: #eee; }
     .hljs-emphasis { font-style: italic; }
     .hljs-strong { font-weight: bold; }
   }
 
-  hr {
-    border: 0;
-    border-top: 1px solid var(--border-color);
-    margin: 2rem 0;
-  }
-
+  hr { border: 0; border-top: 1px solid var(--border-color); margin: 2rem 0; }
   a {
     color: var(--accent);
     text-decoration: underline;
     text-underline-offset: 4px;
-    &:hover {
-      text-decoration-thickness: 2px;
-    }
+    &:hover { text-decoration-thickness: 2px; }
   }
 }
 
-tiptap-editor {
-  display: block;
-}
+tiptap-editor { display: block; }
