@@ -135,8 +135,7 @@ html, body {
   overflow: hidden;
   position: fixed;
   overscroll-behavior: none;
-  touch-action: none; /* Disable all browser-level gestures at root */
-  -webkit-user-select: none;
+  touch-action: manipulation; /* Allow panning and zooming, disable double-tap-zoom */
 }
 
 body {

@@ -9,7 +9,7 @@
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
-  touch-action: none; // Prevent pull-to-refresh on layout
+  touch-action: manipulation; // Allow gestures while preventing pull-to-refresh where possible
 
   .sidebar-wrapper {
     width: 260px;
