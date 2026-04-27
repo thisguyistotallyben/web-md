@@ -187,7 +187,17 @@ export class EditorComponent implements OnInit, OnDestroy {
           emitUpdate: false, 
           contentType: 'markdown' 
         } as any);
-        this.editor.commands.focus();
+        
+        // Reset view state for new note
+        this.isHeaderCollapsed.set(false);
+        this.lastScrollTop = 0;
+        
+        if (this.editorBody) {
+          this.editorBody.nativeElement.scrollTop = 0;
+        }
+
+        // Focus at the start of the document
+        this.editor.commands.focus('start');
       },
       error: (err) => console.error('File Read Failed:', err)
     });
