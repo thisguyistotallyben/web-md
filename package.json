@@ -38,6 +38,7 @@
     "lowlight": "^3.3.0",
     "marked": "^17.0.5",
     "ngx-tiptap": "^14.0.1",
+    "redis": "^5.12.1",
     "rxjs": "~7.8.0",
     "socket.io": "^4.8.3",
     "socket.io-client": "^4.8.3",
