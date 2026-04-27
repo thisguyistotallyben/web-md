@@ -14,14 +14,22 @@ export class RealtimeService {
   fileUpdated = new Subject<{ path: string }>();
 
   constructor() {
-    this.socket = io();
+    this.socket = io({
+      transports: ['polling', 'websocket'],
+      reconnectionAttempts: 5,
+      timeout: 10000
+    });
 
     this.socket.on('connect', () => {
       console.log('[Realtime] WebSocket Connected! ID:', this.socket.id);
     });
 
     this.socket.on('connect_error', (err) => {
-      console.error('[Realtime] WebSocket Connection Error:', err.message);
+      console.error('[Realtime] WebSocket Connection Error:', err);
+      console.error('[Realtime] Error Message:', err.message);
+      if (err.message === 'xhr poll error') {
+        console.warn('[Realtime] This often happens when a reverse proxy (Nginx) is not configured to handle WebSockets or is blocking requests.');
+      }
     });
 
     this.socket.on('disconnect', (reason) => {

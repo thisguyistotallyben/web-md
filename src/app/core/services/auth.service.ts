@@ -16,7 +16,8 @@ export class AuthService {
     if (!token || !expiry) return false;
     
     if (Date.now() > parseInt(expiry)) {
-      this.logout();
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('auth_expiry');
       return false;
     }
     
