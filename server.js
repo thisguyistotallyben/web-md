@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const fs = require('fs/promises');
 const path = require('path');
 const http = require('http');
@@ -8,6 +7,12 @@ const crypto = require('crypto');
 const { Server } = require('socket.io');
 
 const app = express();
+app.use(cors());
+app.use(express.json());
+
+const BROWSER_DIR = path.join(__dirname, 'dist/web-md/browser');
+app.use(express.static(BROWSER_DIR));
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
