@@ -77,7 +77,7 @@ io.on('connection', (socket) => {
 });
 
 const PORT = 3000;
-const DATA_DIR = path.join(__dirname, 'data');
+let DATA_DIR;
 
 // Authentication configuration
 const DEFAULT_PASSWORD = 'admin';
@@ -356,6 +356,27 @@ app.get('*all', (req, res) => {
 });
 
 async function start() {
+  const dataPathArg = process.argv[2];
+
+  if (!dataPathArg) {
+    console.error('ERROR: Data directory path is required.');
+    console.error('Usage: node server.js <path-to-data-directory>');
+    process.exit(1);
+  }
+
+  DATA_DIR = path.resolve(dataPathArg);
+
+  try {
+    const stats = await fs.stat(DATA_DIR);
+    if (!stats.isDirectory()) {
+      console.error(`ERROR: The path "${DATA_DIR}" is not a directory.`);
+      process.exit(1);
+    }
+  } catch (err) {
+    console.error(`ERROR: Could not access data directory "${DATA_DIR}":`, err.message);
+    process.exit(1);
+  }
+
   await connectRedis();
   await loadPassword();
 
