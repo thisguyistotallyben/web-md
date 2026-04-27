@@ -198,51 +198,92 @@
 
 .tiptap {
   outline: none;
-  line-height: 1.6;
-  font-size: 16px;
+  line-height: 1.7;
+  font-size: 17px;
   color: var(--text-main);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Noto Serif', 'Georgia', 'Times New Roman', Times, serif;
   flex: 1;
   min-height: 100%; // Ensure editor is always at least as tall as the viewport
+  max-width: 850px;
+  margin: 0 auto;
 
   > * + * {
-    margin-top: 1rem;
+    margin-top: 1.25rem;
+  }
+
+  p {
+    margin-bottom: 1rem;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    line-height: 1.4;
+    line-height: 1.3;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
     color: var(--text-main);
+    font-family: 'Noto Serif', 'Georgia', 'Times New Roman', Times, serif;
   }
 
-  h1 { font-size: 2.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
-  h2 { font-size: 1.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.3rem; }
-  h3 { font-size: 1.5rem; }
-  h4 { font-size: 1.25rem; }
+  h1 { 
+    font-size: 1.8rem; 
+    border-bottom: 1px solid var(--border-color); 
+    box-shadow: 0 2px 0 0 var(--bg-deep), 0 3px 0 0 var(--border-color);
+    padding-bottom: 0.4rem; 
+    margin-top: 1rem;
+    font-weight: 500;
+  }
+
+  h2 { 
+    font-size: 1.25rem; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+    padding-bottom: 0.2rem; 
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  h3 { 
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+  }
+
+  h4 { font-size: 1.05rem; }
 
   ul, ol {
-    padding-left: 2rem;
-    margin-bottom: 1rem;
-    li > p { margin-bottom: 0.25rem; }
+    padding-left: 2.5rem;
+    margin-bottom: 1.5rem;
+    
+    li {
+      margin-bottom: 0.75rem;
+      
+      > p { 
+        margin-bottom: 0.5rem; 
+        display: inline; // Keep first line with bullet
+      }
+
+      ul, ol {
+        margin-top: 0.75rem;
+        margin-bottom: 0.75rem;
+      }
+    }
   }
 
   blockquote {
-    border-left: 4px solid var(--accent);
-    margin: 1.5rem 0;
+    border-left: 3px solid var(--accent);
+    margin: 2rem 0;
     padding: 0.5rem 1.5rem;
     color: var(--text-muted);
-    background-color: var(--bg-well);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-style: italic;
     p { margin: 0; }
   }
 
   code {
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-    background-color: var(--bg-surface);
-    padding: 0.2em 0.4em;
+    background-color: rgba(255, 255, 255, 0.08);
+    padding: 0.15em 0.4em;
     border-radius: var(--radius-sm);
-    font-size: 0.9em;
+    font-size: 0.85em;
+    color: var(--accent);
   }
 
   pre {
@@ -253,12 +294,13 @@
     border: 1px solid var(--border-color);
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
     line-height: 1.5;
+    margin: 2rem 0;
 
     code {
       background-color: transparent;
       padding: 0;
       color: inherit;
-      font-size: 0.95em;
+      font-size: 0.9em;
     }
 
     /* Syntax Highlighting Colors - Theme Aware */
