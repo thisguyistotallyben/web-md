@@ -11,7 +11,7 @@ import { RealtimeService } from '../core/services/realtime.service';
 import { ViewportService } from '../core/services/viewport.service';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faEllipsisV, faTrash, faFileAlt, faBold, faItalic, faHeading, faRemoveFormat, faQuoteRight, faCode } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faTrash, faFileAlt, faBold, faItalic, faHeading, faRemoveFormat, faQuoteRight, faCode, faEye } from '@fortawesome/free-solid-svg-icons';
 
 import { all, createLowlight } from 'lowlight';
 
@@ -42,12 +42,14 @@ export class EditorComponent implements OnInit, OnDestroy {
   faRemoveFormat = faRemoveFormat;
   faQuoteRight = faQuoteRight;
   faCode = faCode;
+  faEye = faEye;
 
   isSettingsOpen = signal<boolean>(false);
   isSaving = signal<boolean>(false);
   isRenaming = signal<boolean>(false);
   isActionMenuOpen = signal<boolean>(false);
   isHeaderCollapsed = this.viewportService.isHeaderCollapsed;
+  isRawMode = signal<boolean>(false);
   activeFilePath = signal<string | null>(null);
   activeFileName = signal<string>('Welcome');
   
@@ -113,6 +115,32 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     this.lastScrollTop = scrollTop;
+  }
+
+  toggleRawMode() {
+    if (this.isRawMode()) {
+      // Switching from Raw to Formatted
+      const textArea = this.editorBody.nativeElement.querySelector('.raw-editor') as HTMLTextAreaElement;
+      if (textArea) {
+        const rawContent = textArea.value;
+        this.editor.commands.setContent(rawContent, { 
+          emitUpdate: false, 
+          contentType: 'markdown' 
+        } as any);
+        this.saveSubject.next(rawContent);
+      }
+      this.isRawMode.set(false);
+    } else {
+      // Switching from Formatted to Raw
+      this.isRawMode.set(true);
+      // Content will be retrieved in template via editor.getMarkdown()
+    }
+  }
+
+  onRawChange(event: Event) {
+    const value = (event.target as HTMLTextAreaElement).value;
+    this.lastTypingTime = Date.now();
+    this.saveSubject.next(value);
   }
 
   editor = new Editor({

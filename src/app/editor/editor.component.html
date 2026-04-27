@@ -1,4 +1,4 @@
-<div class="editor-container" [class.header-collapsed]="isHeaderCollapsed()">
+<div class="editor-container" [class.header-collapsed]="isHeaderCollapsed()" [class.raw-mode]="isRawMode()">
   <div class="editor-header">
     <div class="note-info">
       @if (!isRenaming()) {
@@ -18,6 +18,14 @@
 
     @if (activeFilePath()) {
       <div class="actions">
+        <button class="raw-toggle-btn" 
+                (click)="toggleRawMode()" 
+                [title]="isRawMode() ? 'Switch to Formatted' : 'Switch to Raw Markdown'"
+                [class.active]="isRawMode()">
+          <fa-icon [icon]="isRawMode() ? faEye : faCode"></fa-icon>
+          <span class="btn-label">Raw</span>
+        </button>
+
         <button class="action-menu-btn" (click)="isActionMenuOpen.set(!isActionMenuOpen())" [class.active]="isActionMenuOpen()">
           <fa-icon [icon]="faEllipsisV"></fa-icon>
         </button>
@@ -34,7 +42,7 @@
     }
   </div>
 
-  @if (activeFilePath()) {
+  @if (activeFilePath() && !isRawMode()) {
     <div class="editor-toolbar">
       <button (click)="toggleBold()" [class.active]="editor.isActive('bold')" title="Bold">
         <fa-icon [icon]="faBold"></fa-icon>
@@ -61,7 +69,14 @@
   }
 
   <div class="editor-body" #editorBody (scroll)="onScroll($event)">
-    <tiptap-editor [editor]="editor"></tiptap-editor>
+    @if (!isRawMode()) {
+      <tiptap-editor [editor]="editor"></tiptap-editor>
+    } @else {
+      <textarea class="raw-editor" 
+                [value]="$any(editor).getMarkdown()"
+                (input)="onRawChange($event)"
+                spellcheck="false"></textarea>
+    }
     <div class="keyboard-spacer"></div>
   </div>
 </div>
