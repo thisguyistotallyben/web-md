@@ -46,7 +46,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: left 0.3s ease, color 0.2s;
+    transition: left 0.3s ease, color 0.2s, margin-top 0.3s ease, opacity 0.3s ease;
     touch-action: manipulation;
 
     &:hover {
@@ -68,6 +68,16 @@
     
     .sidebar-toggle {
       left: 0;
+    }
+  }
+
+  &.header-collapsed {
+    @media (max-width: 768px) {
+      .sidebar-toggle {
+        margin-top: -60px;
+        opacity: 0;
+        pointer-events: none;
+      }
     }
   }
 

@@ -5,6 +5,7 @@ import { EditorComponent } from '../../editor/editor.component';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../core/services/modal.service';
 import { SystemService } from '../../core/services/system.service';
+import { ViewportService } from '../../core/services/viewport.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faBars, faChevronLeft, faPlus, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
@@ -19,6 +20,7 @@ import { Subscription } from 'rxjs';
 export class MainLayoutComponent implements OnDestroy {
   public modalService = inject(ModalService);
   public systemService = inject(SystemService);
+  public viewportService = inject(ViewportService);
   
   @ViewChild('modalInput') modalInput!: ElementRef<HTMLInputElement>;
   private modalSub: Subscription;
@@ -30,6 +32,7 @@ export class MainLayoutComponent implements OnDestroy {
   faExclamationTriangle = faExclamationTriangle;
 
   isSidebarCollapsed = signal<boolean>(false);
+  isHeaderCollapsed = this.viewportService.isHeaderCollapsed;
   modalValue = signal<string>('');
 
   constructor() {

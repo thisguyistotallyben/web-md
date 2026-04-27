@@ -1,4 +1,6 @@
-<div class="layout-container" [class.sidebar-collapsed]="isSidebarCollapsed()">
+<div class="layout-container" 
+     [class.sidebar-collapsed]="isSidebarCollapsed()"
+     [class.header-collapsed]="isHeaderCollapsed()">
   <aside class="sidebar-wrapper">
     <app-sidebar></app-sidebar>
   </aside>

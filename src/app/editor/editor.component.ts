@@ -47,6 +47,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   isSaving = signal<boolean>(false);
   isRenaming = signal<boolean>(false);
   isActionMenuOpen = signal<boolean>(false);
+  isHeaderCollapsed = this.viewportService.isHeaderCollapsed;
   activeFilePath = signal<string | null>(null);
   activeFileName = signal<string>('Welcome');
   
@@ -54,6 +55,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   private saveSubject = new Subject<string>();
   private lastTypingTime = 0;
+  private lastScrollTop = 0;
 
   constructor() {
     // Automatically scroll cursor to top when keyboard height changes
@@ -87,6 +89,30 @@ export class EditorComponent implements OnInit, OnDestroy {
       top: targetScroll,
       behavior: 'smooth'
     });
+  }
+
+  onScroll(event: Event) {
+    const target = event.target as HTMLElement;
+    const scrollTop = target.scrollTop;
+    const isMobile = window.innerWidth <= 768;
+
+    if (!isMobile) {
+      this.isHeaderCollapsed.set(false);
+      return;
+    }
+
+    // Threshold to prevent flickering
+    if (Math.abs(scrollTop - this.lastScrollTop) < 10) return;
+
+    if (scrollTop > this.lastScrollTop && scrollTop > 60) {
+      // Scrolling down
+      this.isHeaderCollapsed.set(true);
+    } else if (scrollTop < this.lastScrollTop) {
+      // Scrolling up
+      this.isHeaderCollapsed.set(false);
+    }
+
+    this.lastScrollTop = scrollTop;
   }
 
   editor = new Editor({

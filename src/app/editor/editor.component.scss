@@ -5,6 +5,16 @@
   width: 100%;
   background-color: var(--bg-deep);
   overflow: hidden;
+
+  &.header-collapsed {
+    @media (max-width: 768px) {
+      .editor-header {
+        margin-top: -60px;
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+  }
 }
 
 .editor-header {
@@ -17,6 +27,7 @@
   background-color: var(--bg-well); // Darker than deep
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 10;
+  transition: margin-top 0.3s ease, opacity 0.3s ease;
 
   @media (max-width: 768px) {
     padding: 0 1rem 0 4rem;

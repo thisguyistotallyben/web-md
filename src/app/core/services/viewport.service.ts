@@ -8,6 +8,7 @@ export class ViewportService {
   
   // Track current keyboard height
   keyboardHeight = signal<number>(0);
+  isHeaderCollapsed = signal<boolean>(false);
 
   constructor() {
     if (typeof window !== 'undefined' && window.visualViewport) {

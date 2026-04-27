@@ -1,4 +1,4 @@
-<div class="editor-container">
+<div class="editor-container" [class.header-collapsed]="isHeaderCollapsed()">
   <div class="editor-header">
     <div class="note-info">
       @if (!isRenaming()) {
@@ -60,7 +60,7 @@
     </div>
   }
 
-  <div class="editor-body" #editorBody>
+  <div class="editor-body" #editorBody (scroll)="onScroll($event)">
     <tiptap-editor [editor]="editor"></tiptap-editor>
     <div class="keyboard-spacer"></div>
   </div>
