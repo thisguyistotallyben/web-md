@@ -68,6 +68,25 @@ body.theme-sepia {
   --code-type: #7a4a8a;
 }
 
+body.theme-sepia-dark {
+  --bg-deep: #1c1814;
+  --bg-surface: #28231e;
+  --bg-well: #231f1a;
+  --accent: #d4a76a;
+  --text-main: #e5d5a9;
+  --text-muted: #a69e8a;
+  --border-color: #38312a;
+  --active-bg: rgba(212, 167, 106, 0.1);
+
+  /* Sepia Dark Code Colors */
+  --code-comment: #82776c;
+  --code-keyword: #d4a76a;
+  --code-string: #9ca67b;
+  --code-number: #e5d5a9;
+  --code-title: #bdae93;
+  --code-type: #d5c4a1;
+}
+
 body.theme-high-contrast {
   --bg-deep: #ffffff;
   --bg-surface: #ffffff;

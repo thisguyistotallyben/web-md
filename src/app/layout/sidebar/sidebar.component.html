@@ -91,6 +91,14 @@
             }
           </div>
           <div class="theme-option"
+            [class.active]="themeService.currentTheme() === 'sepia-dark'"
+            (click)="setTheme('sepia-dark')">
+            <span class="theme-name">Sepia Dark</span>
+            @if (themeService.currentTheme() === 'sepia-dark') {
+              <span class="check">✓</span>
+            }
+          </div>
+          <div class="theme-option"
             [class.active]="themeService.currentTheme() === 'high-contrast'"
             (click)="setTheme('high-contrast')">
             <span class="theme-name">High Contrast Light</span>
