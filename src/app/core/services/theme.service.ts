@@ -16,6 +16,23 @@ export class ThemeService {
   private http = inject(HttpClient);
   currentTheme = signal<Theme>('dark');
 
+  constructor() {
+    // Try to load from localStorage for instant apply
+    const savedTheme = localStorage.getItem('app_theme') as Theme;
+    if (savedTheme) {
+      this.setTheme(savedTheme, false);
+    }
+  }
+
+  loadTheme() {
+    // Public endpoint for pre-auth theme loading
+    this.http.get<{theme: Theme}>('/api/theme').subscribe(res => {
+      if (res && res.theme) {
+        this.setTheme(res.theme, false);
+      }
+    });
+  }
+
   loadSettings() {
     this.http.get<AppSettings>('/api/settings').subscribe(settings => {
       if (settings && settings.theme) {
@@ -37,6 +54,7 @@ export class ThemeService {
     if (theme === 'gruvbox') document.body.classList.add('theme-gruvbox');
     
     this.currentTheme.set(theme);
+    localStorage.setItem('app_theme', theme);
 
     if (save) {
       this.http.post('/api/settings', { theme }).subscribe();

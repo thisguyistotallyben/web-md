@@ -302,6 +302,21 @@ app.post('/api/fs/delete', requireAuth, async (req, res) => {
 });
 
 // Settings Endpoints
+app.get('/api/theme', async (req, res) => {
+  try {
+    if (redisClient.isOpen) {
+      const redisSettings = await redisClient.get('web-md:config:theme');
+      if (redisSettings) {
+        const settings = JSON.parse(redisSettings);
+        return res.json({ theme: settings.theme });
+      }
+    }
+    res.json({ theme: 'dark' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.get('/api/settings', requireAuth, async (req, res) => {
   try {
     if (redisClient.isOpen) {

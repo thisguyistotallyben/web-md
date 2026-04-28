@@ -5,6 +5,7 @@ import { AuthComponent } from './features/auth/auth.component';
 import { AuthService } from './core/services/auth.service';
 import { ViewportService } from './core/services/viewport.service';
 import { RealtimeService } from './core/services/realtime.service';
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,11 @@ export class AppComponent {
   public authService = inject(AuthService);
   private viewportService = inject(ViewportService);
   private realtimeService = inject(RealtimeService);
+  private themeService = inject(ThemeService);
+
+  constructor() {
+    this.themeService.loadTheme();
+  }
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll(event: Event) {
