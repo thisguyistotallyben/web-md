@@ -36,6 +36,10 @@ export class FileService {
     return this.http.post<{ success: boolean }>('/api/fs/rename', { oldPath, newName });
   }
 
+  move(sourcePath: string, targetParentPath: string): Observable<{ success: boolean }> {
+    return this.http.post<{ success: boolean }>('/api/fs/move', { sourcePath, targetParentPath });
+  }
+
   delete(path: string): Observable<{ success: boolean }> {
     return this.http.post<{ success: boolean }>('/api/fs/delete', { path });
   }

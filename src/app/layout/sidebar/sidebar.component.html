@@ -29,7 +29,13 @@
   <!-- Content Section -->
   <div class="content" (scroll)="closeContextMenu()">
     @if (!isSettingsOpen() && !isTrashOpen()) {
-      <div class="tree-container" (click)="closeContextMenu()" (contextmenu)="onContextMenu($event, null)">
+      <div class="tree-container"
+           [class.drag-over-tree]="isDragOverTreeContainer()"
+           (dragover)="onTreeContainerDragOver($event)"
+           (dragleave)="onTreeContainerDragLeave($event)"
+           (drop)="onDrop($event, 'root')"
+           (click)="closeContextMenu()" 
+           (contextmenu)="onContextMenu($event, null)">
         @if (treeItems().length === 0) {
           <div class="empty-state">
             No notes or folders yet.<br>Right-click here to create one!
@@ -190,9 +196,23 @@
         [class.folder-item]="item.type === 'folder'"
         [class.note-item]="item.type === 'note'"
         [class.active]="activeNotePath() === item.path"
+        [class.is-dragging]="draggedItem() === item"
+        [class.drag-over]="dragOverItem() === item"
+        [attr.draggable]="!isTrashOpen() && !isSettingsOpen() ? 'true' : 'false'"
+        [attr.data-path]="item.path"
+        [attr.data-type]="item.type"
         [style.padding-left.px]="(depth * 14) + 12"
         (click)="onItemClick(item); $event.stopPropagation()"
-        (contextmenu)="onContextMenu($event, item)">
+        (contextmenu)="onContextMenu($event, item)"
+        (dragstart)="onDragStart($event, item)"
+        (dragend)="onDragEnd($event)"
+        (dragover)="onDragOver($event, item)"
+        (dragleave)="onDragLeave($event, item)"
+        (drop)="onDrop($event, item)"
+        (touchstart)="onTouchStart($event, item)"
+        (touchmove)="onTouchMove($event)"
+        (touchend)="onTouchEnd($event)"
+        (touchcancel)="onTouchCancel($event)">
         
         @if (item.type === 'folder') {
           <span class="expand-icon" (click)="toggleFolder(item); $event.stopPropagation()">
@@ -260,5 +280,15 @@
         <fa-icon [icon]="faFolder" class="menu-icon"></fa-icon> New Folder
       </div>
     }
+  </div>
+}
+
+<!-- Floating Glassmorphic Drag Proxy for Mobile Touch Dragging -->
+@if (touchDragProxy(); as proxy) {
+  <div class="mobile-drag-proxy" [style.top.px]="proxy.y" [style.left.px]="proxy.x">
+    <span class="icon">
+      <fa-icon [icon]="proxy.type === 'folder' ? faFolder : faFileAlt"></fa-icon>
+    </span>
+    <span class="name">{{ proxy.type === 'note' ? proxy.name.replace('.md', '') : proxy.name }}</span>
   </div>
 }

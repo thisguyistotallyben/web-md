@@ -69,6 +69,17 @@ export class SidebarComponent implements OnInit {
   trashItems = signal<FileItem[]>([]);
   contextMenu = signal<{ x: number, y: number, item: FileItem | null } | null>(null);
 
+  // Drag & Drop State Signals
+  draggedItem = signal<FileItem | null>(null);
+  dragOverItem = signal<FileItem | null>(null);
+  isDragOverTreeContainer = signal<boolean>(false);
+  touchDragProxy = signal<{ name: string, type: 'note' | 'folder', x: number, y: number } | null>(null);
+
+  // Touch/Long press internal mechanics
+  private touchTimer: any = null;
+  private touchStartPos = { x: 0, y: 0 };
+  private isTouchDragging = false;
+
   ngOnInit() {
     this.refreshTree();
     this.themeService.loadSettings();
@@ -381,6 +392,270 @@ export class SidebarComponent implements OnInit {
   logout() {
     if (confirm('Are you sure you want to log out?')) {
       this.authService.logout();
+    }
+  }
+
+  // --- Drag & Drop Methods ---
+
+  // Desktop drag starts
+  onDragStart(event: DragEvent, item: FileItem) {
+    if (this.isTrashOpen() || this.isSettingsOpen()) return;
+    this.closeContextMenu();
+    this.draggedItem.set(item);
+    if (event.dataTransfer) {
+      event.dataTransfer.setData('text/plain', item.path);
+      event.dataTransfer.effectAllowed = 'move';
+    }
+  }
+
+  onDragOver(event: DragEvent, item: FileItem) {
+    if (item.type === 'folder' && this.isValidDropTarget(item)) {
+      event.preventDefault();
+      this.dragOverItem.set(item);
+      this.isDragOverTreeContainer.set(false);
+    }
+  }
+
+  onDragLeave(event: DragEvent, item: FileItem) {
+    if (this.dragOverItem() === item) {
+      this.dragOverItem.set(null);
+    }
+  }
+
+  onDragEnd(event: DragEvent) {
+    this.draggedItem.set(null);
+    this.dragOverItem.set(null);
+    this.isDragOverTreeContainer.set(false);
+  }
+
+  onTreeContainerDragOver(event: DragEvent) {
+    if (this.draggedItem() && this.isValidDropTarget('root')) {
+      event.preventDefault();
+      this.isDragOverTreeContainer.set(true);
+    }
+  }
+
+  onTreeContainerDragLeave(event: DragEvent) {
+    this.isDragOverTreeContainer.set(false);
+  }
+
+  onDrop(event: DragEvent, target: FileItem | 'root') {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const dragged = this.draggedItem();
+    if (!dragged) return;
+
+    if (!this.isValidDropTarget(target)) return;
+
+    const targetParentPath = target === 'root' ? '' : target.path;
+    this.executeMove(dragged, targetParentPath);
+  }
+
+  // --- Mobile Touch Drag & Drop Methods ---
+
+  onTouchStart(event: TouchEvent, item: FileItem) {
+    if (this.isTrashOpen() || this.isSettingsOpen()) return;
+    
+    const touch = event.touches[0];
+    this.touchStartPos = { x: touch.clientX, y: touch.clientY };
+    this.isTouchDragging = false;
+
+    if (this.touchTimer) {
+      clearTimeout(this.touchTimer);
+    }
+
+    this.touchTimer = setTimeout(() => {
+      // Enter Touch Drag Mode after 400ms long press
+      this.isTouchDragging = true;
+      this.draggedItem.set(item);
+
+      // Web Haptic Feedback
+      if ('vibrate' in navigator) {
+        navigator.vibrate(50);
+      }
+
+      this.touchDragProxy.set({
+        name: item.name,
+        type: item.type,
+        x: touch.clientX,
+        y: touch.clientY
+      });
+    }, 400);
+  }
+
+  onTouchMove(event: TouchEvent) {
+    const touch = event.touches[0];
+    const dx = touch.clientX - this.touchStartPos.x;
+    const dy = touch.clientY - this.touchStartPos.y;
+
+    if (!this.isTouchDragging) {
+      // Cancel the long-press timer if finger moves before drag activation
+      if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+        if (this.touchTimer) {
+          clearTimeout(this.touchTimer);
+          this.touchTimer = null;
+        }
+      }
+      return;
+    }
+
+    // Active drag: prevent default scroll behavior and update proxy position
+    event.preventDefault();
+    const proxy = this.touchDragProxy();
+    if (proxy) {
+      this.touchDragProxy.set({
+        ...proxy,
+        x: touch.clientX,
+        y: touch.clientY
+      });
+    }
+
+    // Resolve target element underneath finger
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (!element) return;
+
+    const itemEl = element.closest('.sidebar-item');
+    if (itemEl) {
+      const path = itemEl.getAttribute('data-path');
+      if (path) {
+        const targetItem = this.findItemByPath(this.treeItems(), path);
+        if (targetItem && targetItem.type === 'folder' && this.isValidDropTarget(targetItem)) {
+          this.dragOverItem.set(targetItem);
+          this.isDragOverTreeContainer.set(false);
+          return;
+        }
+      }
+    }
+
+    const treeContainerEl = element.closest('.tree-container');
+    if (treeContainerEl) {
+      if (this.isValidDropTarget('root')) {
+        this.isDragOverTreeContainer.set(true);
+      }
+      this.dragOverItem.set(null);
+    } else {
+      this.isDragOverTreeContainer.set(false);
+      this.dragOverItem.set(null);
+    }
+  }
+
+  onTouchEnd(event: TouchEvent) {
+    if (this.touchTimer) {
+      clearTimeout(this.touchTimer);
+      this.touchTimer = null;
+    }
+
+    if (this.isTouchDragging) {
+      event.preventDefault();
+      
+      const dragged = this.draggedItem();
+      const targetFolder = this.dragOverItem();
+      const isRoot = this.isDragOverTreeContainer();
+
+      if (dragged) {
+        if (targetFolder && this.isValidDropTarget(targetFolder)) {
+          this.executeMove(dragged, targetFolder.path);
+        } else if (isRoot && this.isValidDropTarget('root')) {
+          this.executeMove(dragged, '');
+        }
+      }
+
+      // Reset
+      this.isTouchDragging = false;
+      this.draggedItem.set(null);
+      this.dragOverItem.set(null);
+      this.isDragOverTreeContainer.set(false);
+      this.touchDragProxy.set(null);
+    }
+  }
+
+  onTouchCancel(event: TouchEvent) {
+    if (this.touchTimer) {
+      clearTimeout(this.touchTimer);
+      this.touchTimer = null;
+    }
+    this.isTouchDragging = false;
+    this.draggedItem.set(null);
+    this.dragOverItem.set(null);
+    this.isDragOverTreeContainer.set(false);
+    this.touchDragProxy.set(null);
+  }
+
+  // --- Helper Validation and Move Methods ---
+
+  isValidDropTarget(target: FileItem | 'root'): boolean {
+    const dragged = this.draggedItem();
+    if (!dragged) return false;
+
+    if (target === 'root') {
+      return dragged.path.includes('/');
+    }
+
+    // Can't drop into itself
+    if (dragged.path === target.path) return false;
+
+    // Can't drop a folder into its own subfolder
+    if (target.path.startsWith(dragged.path + '/')) return false;
+
+    // Can't drop into its current parent folder
+    const currentParent = dragged.path.split('/').slice(0, -1).join('/');
+    if (currentParent === target.path) return false;
+
+    return true;
+  }
+
+  findItemByPath(items: FileItem[], path: string): FileItem | null {
+    for (const item of items) {
+      if (item.path === path) return item;
+      if (item.children) {
+        const found = this.findItemByPath(item.children, path);
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+
+  private executeMove(sourceItem: FileItem, targetParentPath: string) {
+    this.fileService.move(sourceItem.path, targetParentPath).subscribe({
+      next: () => {
+        // Recalculate editor paths if needed
+        this.updateActiveNotePathAfterMove(sourceItem.path, targetParentPath, sourceItem.type);
+
+        // Auto-expand drop folder
+        if (targetParentPath) {
+          this.expandedFolders.update(set => {
+            const newSet = new Set(set);
+            newSet.add(targetParentPath);
+            return newSet;
+          });
+        }
+
+        this.refreshTree();
+      },
+      error: (err) => {
+        console.error('Failed to move item:', err);
+      }
+    });
+  }
+
+  private updateActiveNotePathAfterMove(oldPath: string, targetParentPath: string, type: 'folder' | 'note') {
+    const activePath = this.activeNotePath();
+    if (!activePath) return;
+
+    const name = oldPath.split('/').pop()!;
+    const newPath = targetParentPath ? `${targetParentPath}/${name}` : name;
+
+    if (type === 'note' && activePath === oldPath) {
+      this.activeNotePath.set(newPath);
+      window.dispatchEvent(new CustomEvent('open-note', { detail: newPath }));
+    } else if (type === 'folder') {
+      if (activePath === oldPath || activePath.startsWith(oldPath + '/')) {
+        const suffix = activePath.substring(oldPath.length);
+        const updatedActivePath = newPath + suffix;
+        this.activeNotePath.set(updatedActivePath);
+        window.dispatchEvent(new CustomEvent('open-note', { detail: updatedActivePath }));
+      }
     }
   }
 }

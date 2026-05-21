@@ -390,6 +390,37 @@ app.post('/api/fs/rename', requireAuth, async (req, res) => {
   }
 });
 
+// Move file or folder
+app.post('/api/fs/move', requireAuth, async (req, res) => {
+  try {
+    const { sourcePath, targetParentPath } = req.body;
+    const sourceFullPath = path.join(DATA_DIR, sourcePath);
+    const targetFullPath = path.join(DATA_DIR, targetParentPath, path.basename(sourcePath));
+
+    if (!sourceFullPath.startsWith(DATA_DIR) || !targetFullPath.startsWith(DATA_DIR)) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
+    if (sourceFullPath === targetFullPath) {
+      return res.status(400).json({ error: 'Source and target are the same' });
+    }
+
+    // Prevent moving a folder into its own subdirectory
+    if (targetFullPath.startsWith(sourceFullPath + path.sep)) {
+      return res.status(400).json({ error: 'Cannot move a folder into its own subdirectory' });
+    }
+
+    await fs.rename(sourceFullPath, targetFullPath);
+    
+    // Broadcast file system change
+    io.emit('fs-changed');
+
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Delete file or folder
 app.post('/api/fs/delete', requireAuth, async (req, res) => {
   try {
