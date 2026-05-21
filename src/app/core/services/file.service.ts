@@ -40,6 +40,10 @@ export class FileService {
     return this.http.post<{ success: boolean }>('/api/fs/delete', { path });
   }
 
+  listAll(): Observable<FileItem[]> {
+    return this.http.get<FileItem[]>('/api/fs/all');
+  }
+
   listTrash(): Observable<FileItem[]> {
     return this.http.get<FileItem[]>('/api/fs/trash');
   }

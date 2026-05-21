@@ -204,6 +204,51 @@ app.get('/api/fs', requireAuth, async (req, res) => {
   }
 });
 
+// Helper function to recursively get all files in a directory
+async function getFilesRecursive(dir, relativePath = '') {
+  let results = [];
+  try {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const name = entry.name;
+      // Skip hidden files/folders (starting with .) and settings.json
+      if (name.startsWith('.') || name === 'settings.json') continue;
+      
+      const itemPath = relativePath ? path.join(relativePath, name) : name;
+      const fullPath = path.join(dir, name);
+      
+      if (entry.isDirectory()) {
+        results.push({
+          name,
+          type: 'folder',
+          path: itemPath
+        });
+        const subResults = await getFilesRecursive(fullPath, itemPath);
+        results = results.concat(subResults);
+      } else if (name.endsWith('.md')) {
+        results.push({
+          name,
+          type: 'note',
+          path: itemPath
+        });
+      }
+    }
+  } catch (err) {
+    console.error(`Error reading directory ${dir}:`, err.message);
+  }
+  return results;
+}
+
+// Get all files recursively (useful for command palette autocomplete)
+app.get('/api/fs/all', requireAuth, async (req, res) => {
+  try {
+    const files = await getFilesRecursive(DATA_DIR);
+    res.json(files);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // List trash content
 app.get('/api/fs/trash', requireAuth, async (req, res) => {
   try {

@@ -88,6 +88,19 @@ export class SidebarComponent implements OnInit {
     this.activeNotePath.set(event.detail);
   }
 
+  @HostListener('window:open-settings')
+  onOpenSettings() {
+    this.isSettingsOpen.set(true);
+    this.isTrashOpen.set(false);
+  }
+
+  @HostListener('window:open-trash')
+  onOpenTrash() {
+    this.isTrashOpen.set(true);
+    this.isSettingsOpen.set(false);
+    this.loadTrash();
+  }
+
   async refreshTree() {
     if (this.isTrashOpen()) {
       this.loadTrash();
