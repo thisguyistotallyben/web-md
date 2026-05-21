@@ -1,5 +1,5 @@
-import { Component, signal, computed, inject, OnInit, HostListener } from '@angular/core';
-
+import { Component, signal, inject, OnInit, HostListener } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FileService, FileItem } from '../../core/services/file.service';
 import { ThemeService, Theme } from '../../core/services/theme.service';
@@ -7,12 +7,27 @@ import { AuthService } from '../../core/services/auth.service';
 import { MainLayoutComponent } from '../main-layout/main-layout.component';
 import { ModalService } from '../../core/services/modal.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faFolder, faFileAlt, faChevronLeft, faGear, faPlus, faPowerOff, faLock } from '@fortawesome/free-solid-svg-icons';
+import { 
+  faFolder, 
+  faFileAlt, 
+  faChevronLeft, 
+  faGear, 
+  faPlus, 
+  faPowerOff, 
+  faLock, 
+  faTrash, 
+  faUndo, 
+  faTrashAlt,
+  faChevronRight,
+  faChevronDown,
+  faEllipsisV
+} from '@fortawesome/free-solid-svg-icons';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [FormsModule, FontAwesomeModule],
+  imports: [FormsModule, FontAwesomeModule, NgTemplateOutlet],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
@@ -31,14 +46,19 @@ export class SidebarComponent implements OnInit {
   faPlus = faPlus;
   faPowerOff = faPowerOff;
   faLock = faLock;
+  faTrash = faTrash;
+  faUndo = faUndo;
+  faTrashAlt = faTrashAlt;
+  faChevronRight = faChevronRight;
+  faChevronDown = faChevronDown;
+  faEllipsisV = faEllipsisV;
 
-  notebooks = signal<FileItem[]>([]);
-  currentNotebook = signal<FileItem | null>(null);
-  currentSubFolder = signal<FileItem | null>(null);
+  treeItems = signal<FileItem[]>([]);
+  expandedFolders = signal<Set<string>>(new Set());
   activeNotePath = signal<string | null>(null);
   
-  isRenaming = signal<boolean>(false);
   isSettingsOpen = signal<boolean>(false);
+  isTrashOpen = signal<boolean>(false);
 
   // Password Change State
   oldPassword = signal<string>('');
@@ -46,23 +66,20 @@ export class SidebarComponent implements OnInit {
   passwordError = signal<string | null>(null);
   passwordSuccess = signal<boolean>(false);
 
-  currentItems = signal<FileItem[]>([]);
+  trashItems = signal<FileItem[]>([]);
+  contextMenu = signal<{ x: number, y: number, item: FileItem | null } | null>(null);
 
   ngOnInit() {
-    this.loadRoot();
+    this.refreshTree();
     this.themeService.loadSettings();
   }
 
   @HostListener('window:refresh-sidebar')
   onRefreshSidebar() {
-    const notebook = this.currentNotebook();
-    const subFolder = this.currentSubFolder();
-    if (subFolder) {
-      this.fileService.list(subFolder.path).subscribe(items => this.currentItems.set(items));
-    } else if (notebook) {
-      this.fileService.list(notebook.path).subscribe(items => this.currentItems.set(items));
+    if (this.isTrashOpen()) {
+      this.loadTrash();
     } else {
-      this.loadRoot();
+      this.refreshTree();
     }
   }
 
@@ -71,24 +88,39 @@ export class SidebarComponent implements OnInit {
     this.activeNotePath.set(event.detail);
   }
 
-  loadRoot() {
-    this.fileService.list('').subscribe(items => {
-      this.notebooks.set(items);
-      this.currentItems.set(items);
-    });
+  async refreshTree() {
+    if (this.isTrashOpen()) {
+      this.loadTrash();
+      return;
+    }
+    try {
+      const items = await firstValueFrom(this.fileService.list(''));
+      await this.loadExpandedChildren(items);
+      this.treeItems.set(items);
+    } catch (err) {
+      console.error('Failed to list files:', err);
+    }
   }
 
-  selectItem(item: FileItem) {
-    if (item.type === 'folder') {
-      if (!this.currentNotebook()) {
-        this.currentNotebook.set(item);
-        this.fileService.list(item.path).subscribe(items => this.currentItems.set(items));
-      } else {
-        this.currentSubFolder.set(item);
-        this.fileService.list(item.path).subscribe(items => this.currentItems.set(items));
+  async loadExpandedChildren(items: FileItem[]) {
+    const promises = items.map(async (item) => {
+      if (item.type === 'folder' && this.expandedFolders().has(item.path)) {
+        try {
+          const children = await firstValueFrom(this.fileService.list(item.path));
+          item.children = children;
+          await this.loadExpandedChildren(children);
+        } catch (err) {
+          console.error(`Failed to list children of ${item.path}:`, err);
+        }
       }
-      this.isRenaming.set(false);
-      this.isSettingsOpen.set(false);
+    });
+    await Promise.all(promises);
+  }
+
+  onItemClick(item: FileItem) {
+    this.closeContextMenu();
+    if (item.type === 'folder') {
+      this.toggleFolder(item);
     } else {
       this.activeNotePath.set(item.path);
       if (window.innerWidth <= 768) {
@@ -98,89 +130,87 @@ export class SidebarComponent implements OnInit {
     }
   }
 
+  toggleFolder(item: FileItem) {
+    this.expandedFolders.update(set => {
+      const newSet = new Set(set);
+      if (newSet.has(item.path)) {
+        newSet.delete(item.path);
+      } else {
+        newSet.add(item.path);
+      }
+      return newSet;
+    });
+    this.refreshTree();
+  }
+
+  isExpanded(path: string): boolean {
+    return this.expandedFolders().has(path);
+  }
+
+  loadTrash() {
+    this.fileService.listTrash().subscribe(items => {
+      this.trashItems.set(items);
+    });
+  }
+
   goBack() {
     if (this.isSettingsOpen()) {
       this.isSettingsOpen.set(false);
-    } else if (this.currentSubFolder()) {
-      this.currentSubFolder.set(null);
-      this.fileService.list(this.currentNotebook()?.path || '').subscribe(items => this.currentItems.set(items));
-      this.isRenaming.set(false);
-    } else if (this.currentNotebook()) {
-      this.currentNotebook.set(null);
-      this.loadRoot();
-      this.isRenaming.set(false);
+    } else if (this.isTrashOpen()) {
+      this.isTrashOpen.set(false);
     }
+    this.refreshTree();
   }
 
   toggleSettings() {
     this.isSettingsOpen.update(v => !v);
+    this.isTrashOpen.set(false);
   }
 
-  startRename() {
-    this.isRenaming.set(true);
-  }
-
-  finishRename(newName: string) {
-    const active = this.currentSubFolder() || this.currentNotebook();
-    if (active && newName.trim() && newName !== active.name) {
-      this.fileService.rename(active.path, newName).subscribe(() => {
-        if (this.currentSubFolder()) {
-          this.currentSubFolder.set({ ...active, name: newName });
-        } else {
-          this.currentNotebook.set({ ...active, name: newName });
-        }
-        this.isRenaming.set(false);
-      });
+  toggleTrash() {
+    this.isTrashOpen.update(v => !v);
+    this.isSettingsOpen.set(false);
+    if (this.isTrashOpen()) {
+      this.loadTrash();
     } else {
-      this.isRenaming.set(false);
+      this.refreshTree();
     }
   }
 
-  handleRenameKeydown(event: KeyboardEvent, input: HTMLInputElement) {
-    if (event.key === 'Enter') this.finishRename(input.value);
-    else if (event.key === 'Escape') this.isRenaming.set(false);
-  }
-
-  createNewNotebook() {
-    this.modalService.open({
-      title: 'New Notebook',
-      placeholder: 'Enter notebook name...',
-      value: 'New Notebook',
-      onConfirm: (name) => {
-        this.fileService.create(name, 'folder', '').subscribe(() => this.loadRoot());
-      }
+  restoreItem(item: FileItem) {
+    this.fileService.restore(item.path).subscribe(() => {
+      this.loadTrash();
+      this.refreshTree();
     });
   }
 
-  createNewFolder() {
-    const notebook = this.currentNotebook();
-    if (!notebook) return;
-    this.modalService.open({
-      title: 'New Folder',
-      placeholder: 'Enter folder name...',
-      value: 'New Folder',
-      onConfirm: (name) => {
-        this.fileService.create(name, 'folder', notebook.path).subscribe(() => {
-          this.fileService.list(notebook.path).subscribe(items => this.currentItems.set(items));
-        });
-      }
-    });
+  deleteItemPermanently(item: FileItem) {
+    if (confirm(`Are you sure you want to permanently delete "${item.name}"? This cannot be undone.`)) {
+      this.fileService.delete(item.path).subscribe(() => {
+        this.loadTrash();
+      });
+    }
   }
 
-  createNewNote() {
-    const active = this.currentSubFolder() || this.currentNotebook();
-    const parentPath = active ? active.path : '';
+  createNote(parentPath: string = '') {
     this.modalService.open({
       title: 'New Note',
       placeholder: 'Enter note title...',
       value: 'Untitled',
       onConfirm: (name) => {
+        if (!name.trim()) return;
         const fileName = name.endsWith('.md') ? name : `${name}.md`;
         const fullPath = parentPath ? `${parentPath}/${fileName}` : fileName;
 
         this.fileService.create(name, 'note', parentPath).subscribe(() => {
-          this.fileService.list(parentPath).subscribe(items => {
-            this.currentItems.set(items);
+          if (parentPath) {
+            this.expandedFolders.update(set => {
+              const newSet = new Set(set);
+              newSet.add(parentPath);
+              return newSet;
+            });
+          }
+          this.refreshTree().then(() => {
             this.activeNotePath.set(fullPath);
             if (window.innerWidth <= 768) this.layout.isSidebarCollapsed.set(true);
             window.dispatchEvent(new CustomEvent('open-note', { detail: fullPath }));
@@ -188,6 +218,117 @@ export class SidebarComponent implements OnInit {
         });
       }
     });
+  }
+
+  createFolder(parentPath: string = '') {
+    this.modalService.open({
+      title: 'New Folder',
+      placeholder: 'Enter folder name...',
+      value: 'New Folder',
+      onConfirm: (name) => {
+        if (!name.trim()) return;
+        this.fileService.create(name, 'folder', parentPath).subscribe(() => {
+          if (parentPath) {
+            this.expandedFolders.update(set => {
+              const newSet = new Set(set);
+              newSet.add(parentPath);
+              return newSet;
+            });
+          }
+          this.refreshTree();
+        });
+      }
+    });
+  }
+
+  renameItem(item: FileItem) {
+    const isNote = item.type === 'note';
+    const currentDisplayName = isNote ? item.name.replace(/\.md$/, '') : item.name;
+    this.modalService.open({
+      title: `Rename ${isNote ? 'Note' : 'Folder'}`,
+      placeholder: 'Enter new name...',
+      value: currentDisplayName,
+      onConfirm: (newName) => {
+        if (!newName.trim() || newName === currentDisplayName) return;
+        const finalName = isNote ? (newName.endsWith('.md') ? newName : `${newName}.md`) : newName;
+        this.fileService.rename(item.path, finalName).subscribe(() => {
+          this.refreshTree();
+          if (this.activeNotePath() === item.path) {
+            const parentPath = item.path.split('/').slice(0, -1).join('/');
+            const newPath = parentPath ? `${parentPath}/${finalName}` : finalName;
+            this.activeNotePath.set(newPath);
+            window.dispatchEvent(new CustomEvent('open-note', { detail: newPath }));
+          }
+        });
+      }
+    });
+  }
+
+  deleteItem(item: FileItem) {
+    const isTrash = item.path.startsWith('.trash');
+    const msg = isTrash 
+      ? `Are you sure you want to permanently delete "${item.name}"? This cannot be undone.`
+      : `Are you sure you want to move "${item.name}" to Trash?`;
+    if (confirm(msg)) {
+      this.fileService.delete(item.path).subscribe(() => {
+        if (isTrash) {
+          this.loadTrash();
+        } else {
+          this.refreshTree();
+          const activePath = this.activeNotePath();
+          if (activePath && (activePath === item.path || activePath.startsWith(item.path + '/'))) {
+            this.activeNotePath.set(null);
+            window.dispatchEvent(new CustomEvent('open-note', { detail: '' }));
+          }
+        }
+      });
+    }
+  }
+
+  onMoreActionsClick(event: MouseEvent, item: FileItem) {
+    event.preventDefault();
+    event.stopPropagation();
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    
+    // Position menu to align nicely under the 3-dots button
+    let x = rect.left;
+    let y = rect.bottom + 4;
+    const menuWidth = 170;
+    const menuHeight = 160;
+
+    if (x + menuWidth > window.innerWidth) {
+      x = window.innerWidth - menuWidth - 10;
+    }
+    if (y + menuHeight > window.innerHeight) {
+      y = rect.top - menuHeight - 4;
+    }
+
+    this.contextMenu.set({ x, y, item });
+  }
+
+  onContextMenu(event: MouseEvent, item: FileItem | null) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    let x = event.clientX;
+    let y = event.clientY;
+    const menuWidth = 170;
+    const menuHeight = 160;
+
+    if (x + menuWidth > window.innerWidth) {
+      x -= menuWidth;
+    }
+    if (y + menuHeight > window.innerHeight) {
+      y -= menuHeight;
+    }
+
+    this.contextMenu.set({ x, y, item });
+  }
+
+  @HostListener('document:click')
+  @HostListener('document:keydown.escape')
+  closeContextMenu() {
+    this.contextMenu.set(null);
   }
 
   setTheme(theme: Theme) {

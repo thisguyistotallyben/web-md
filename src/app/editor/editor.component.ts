@@ -2,6 +2,7 @@ import { Component, OnDestroy, ViewEncapsulation, signal, computed, inject, Host
 
 import { FormsModule } from '@angular/forms';
 import { Editor } from '@tiptap/core';
+import { marked } from 'marked';
 import StarterKit from '@tiptap/starter-kit';
 import { Markdown } from '@tiptap/markdown';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
@@ -11,11 +12,26 @@ import { RealtimeService } from '../core/services/realtime.service';
 import { ViewportService } from '../core/services/viewport.service';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faEllipsisV, faTrash, faFileAlt, faBold, faItalic, faHeading, faRemoveFormat, faQuoteRight, faCode, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faTrash, faFileAlt, faBold, faItalic, faHeading, faRemoveFormat, faQuoteRight, faCode, faEye, faSuperscript } from '@fortawesome/free-solid-svg-icons';
+import Superscript from '@tiptap/extension-superscript';
 
 import { all, createLowlight } from 'lowlight';
 
 const lowlight = createLowlight(all);
+
+const CustomSuperscript = Superscript.extend({
+  // @ts-ignore
+  renderMarkdown(node: any, helpers: any) {
+    return `^${helpers.renderChildren(node)}^`;
+  },
+  // @ts-ignore
+  parseMarkdown(token: any, helpers: any) {
+    return {
+      mark: 'superscript',
+      content: helpers.parseInline(token.tokens),
+    };
+  },
+});
 
 @Component({
   selector: 'app-editor',
@@ -43,6 +59,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   faQuoteRight = faQuoteRight;
   faCode = faCode;
   faEye = faEye;
+  faSuperscript = faSuperscript;
 
   isSettingsOpen = signal<boolean>(false);
   isSaving = signal<boolean>(false);
@@ -148,7 +165,35 @@ export class EditorComponent implements OnInit, OnDestroy {
       StarterKit.configure({
         codeBlock: false,
       }),
-      Markdown,
+      CustomSuperscript,
+      Markdown.configure({
+        markedOptions: {
+          gfm: true,
+        },
+        extensions: [{
+          name: 'superscript',
+          level: 'inline',
+          start(src: string) { return src.indexOf('^'); },
+          tokenizer(this: any, src: string) {
+            const rule = /^\^([^\^]+)\^/;
+            const match = rule.exec(src);
+            if (match) {
+              const token = {
+                type: 'superscript',
+                raw: match[0],
+                text: match[1],
+                tokens: [] as any[],
+              };
+              this.lexer.inline(token.text, token.tokens);
+              return token;
+            }
+            return;
+          },
+          renderer(token: any) {
+            return `<sup>${token.text}</sup>`;
+          }
+        }]
+      } as any),
       CodeBlockLowlight.configure({
         lowlight,
       }),
@@ -207,6 +252,12 @@ export class EditorComponent implements OnInit, OnDestroy {
   @HostListener('window:open-note', ['$event'])
   onOpenNote(event: any) {
     const filePath = event.detail;
+    if (!filePath) {
+      this.activeFilePath.set(null);
+      this.activeFileName.set('Welcome');
+      this.editor.commands.setContent('<h1>Welcome to WebMD</h1><p>Select a note from the sidebar to start editing.</p>');
+      return;
+    }
     this.fileService.read(filePath).subscribe({
       next: (data) => {
         this.activeFilePath.set(filePath);
@@ -263,6 +314,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   // Formatting Commands
   toggleBold() { this.editor.chain().focus().toggleBold().run(); }
   toggleItalic() { this.editor.chain().focus().toggleItalic().run(); }
+  toggleSuperscript() { this.editor.chain().focus().toggleSuperscript().run(); }
   toggleHeading(level: any) { this.editor.chain().focus().toggleHeading({ level }).run(); }
   toggleBlockquote() { this.editor.chain().focus().toggleBlockquote().run(); }
   toggleCodeBlock() { this.editor.chain().focus().toggleCodeBlock().run(); }

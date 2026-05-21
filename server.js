@@ -171,13 +171,16 @@ app.get('/api/fs', requireAuth, async (req, res) => {
       const isDir = entry.isDirectory();
       const name = entry.name;
       const itemPath = path.join(relativePath, name);
+
+      // Skip hidden files/folders (starting with .)
+      if (name.startsWith('.')) return null;
       
       let childCount = 0;
       if (isDir) {
         try {
           const subEntries = await fs.readdir(path.join(DATA_DIR, itemPath), { withFileTypes: true });
           childCount = subEntries.filter(e => 
-            (e.isDirectory() || e.name.endsWith('.md')) && e.name !== 'settings.json'
+            (e.isDirectory() || e.name.endsWith('.md')) && e.name !== 'settings.json' && !e.name.startsWith('.')
           ).length;
         } catch (e) {
           // Ignore errors
@@ -192,10 +195,71 @@ app.get('/api/fs', requireAuth, async (req, res) => {
       };
     }));
 
-    // Filter out settings.json if it still exists from previous runs
-    const result = items.filter(item => (item.type === 'folder' || item.name.endsWith('.md')) && item.name !== 'settings.json');
+    // Filter out settings.json and null entries
+    const result = items.filter(item => item && (item.type === 'folder' || item.name.endsWith('.md')) && item.name !== 'settings.json');
 
     res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// List trash content
+app.get('/api/fs/trash', requireAuth, async (req, res) => {
+  try {
+    const trashDir = path.join(DATA_DIR, '.trash');
+    try {
+      await fs.access(trashDir);
+    } catch {
+      return res.json([]);
+    }
+
+    const entries = await fs.readdir(trashDir, { withFileTypes: true });
+    const items = entries.map(entry => ({
+      name: entry.name,
+      type: entry.isDirectory() ? 'folder' : 'note',
+      path: path.join('.trash', entry.name)
+    }));
+
+    res.json(items);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Restore from trash
+app.post('/api/fs/restore', requireAuth, async (req, res) => {
+  try {
+    const { path: trashPath } = req.body;
+    const fullTrashPath = path.join(DATA_DIR, trashPath);
+    
+    if (!fullTrashPath.startsWith(path.join(DATA_DIR, '.trash'))) {
+      return res.status(400).json({ error: 'Not in trash' });
+    }
+
+    // Move back to root for now
+    const originalName = path.basename(trashPath).replace(/_\d+$/, ''); // Remove timestamp
+    let targetName = originalName;
+    let targetPath = path.join(DATA_DIR, targetName);
+    
+    // Check for collisions in root
+    let counter = 1;
+    while (true) {
+      try {
+        await fs.access(targetPath);
+        const ext = path.extname(originalName);
+        const base = path.basename(originalName, ext);
+        targetName = `${base}_${counter}${ext}`;
+        targetPath = path.join(DATA_DIR, targetName);
+        counter++;
+      } catch {
+        break;
+      }
+    }
+
+    await fs.rename(fullTrashPath, targetPath);
+    io.emit('fs-changed');
+    res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -289,8 +353,25 @@ app.post('/api/fs/delete', requireAuth, async (req, res) => {
 
     if (!fullPath.startsWith(DATA_DIR)) return res.status(403).json({ error: 'Forbidden' });
 
-    await fs.rm(fullPath, { recursive: true, force: true });
-    console.log(`[FS] Deleted: ${targetPath}`);
+    const isTrash = targetPath.startsWith('.trash');
+    
+    if (isTrash) {
+      // Permanent delete
+      await fs.rm(fullPath, { recursive: true, force: true });
+      console.log(`[FS] Permanently Deleted: ${targetPath}`);
+    } else {
+      // Move to trash
+      const trashDir = path.join(DATA_DIR, '.trash');
+      await fs.mkdir(trashDir, { recursive: true });
+      
+      const fileName = path.basename(targetPath);
+      const timestamp = Date.now();
+      const trashName = `${fileName}_${timestamp}`;
+      const fullTrashPath = path.join(trashDir, trashName);
+      
+      await fs.rename(fullPath, fullTrashPath);
+      console.log(`[FS] Moved to Trash: ${targetPath} -> ${trashName}`);
+    }
     
     // Broadcast file system change
     io.emit('fs-changed');

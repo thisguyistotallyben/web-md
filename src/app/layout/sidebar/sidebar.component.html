@@ -1,65 +1,64 @@
 <div class="sidebar">
   <!-- Header Section -->
-  <div class="header" [class.drill-down]="currentNotebook()">
-    @if (!currentNotebook()) {
+  <div class="header" [class.drill-down]="isSettingsOpen() || isTrashOpen()">
+    @if (!isSettingsOpen() && !isTrashOpen()) {
       <span class="logo"><span class="brand-web">Web</span>MD</span>
-      <button class="settings-btn" (click)="toggleSettings()" title="Settings" [class.active]="isSettingsOpen()">
-        <fa-icon [icon]="faGear"></fa-icon>
-      </button>
+      <div class="header-actions">
+        <button class="trash-btn" (click)="toggleTrash()" title="Trash" [class.active]="isTrashOpen()">
+          <fa-icon [icon]="faTrash"></fa-icon>
+        </button>
+        <button class="settings-btn" (click)="toggleSettings()" title="Settings" [class.active]="isSettingsOpen()">
+          <fa-icon [icon]="faGear"></fa-icon>
+        </button>
+      </div>
     } @else {
       <button class="back-btn" (click)="goBack()" title="Go Back">
         <fa-icon [icon]="faChevronLeft"></fa-icon>
       </button>
       <div class="title-container">
-        @if (!isRenaming() && !isSettingsOpen()) {
-          <span class="view-title" (click)="startRename()">
-            {{ currentSubFolder()?.name || currentNotebook()?.name }}
-          </span>
-        }
         @if (isSettingsOpen()) {
           <span class="view-title">Settings</span>
         }
-        @if (isRenaming()) {
-          <input
-            #renameInput
-            class="rename-input"
-            [value]="currentSubFolder()?.name || currentNotebook()?.name"
-            (blur)="finishRename(renameInput.value)"
-            (keydown)="handleRenameKeydown($event, renameInput)"
-            autofocus>
+        @if (isTrashOpen()) {
+          <span class="view-title">Trash</span>
         }
       </div>
     }
-
   </div>
 
   <!-- Content Section -->
-  <div class="content">
-    @if (!isSettingsOpen()) {
-      <div class="section-label">
-        {{ currentSubFolder() ? 'Sub-Folder Content' : (currentNotebook() ? 'Notebook Content' : 'Notebooks') }}
+  <div class="content" (scroll)="closeContextMenu()">
+    @if (!isSettingsOpen() && !isTrashOpen()) {
+      <div class="tree-container" (click)="closeContextMenu()" (contextmenu)="onContextMenu($event, null)">
+        @if (treeItems().length === 0) {
+          <div class="empty-state">
+            No notes or folders yet.<br>Right-click here to create one!
+          </div>
+        } @else {
+          <ng-container *ngTemplateOutlet="treeNodeTemplate; context: { items: treeItems(), depth: 0 }"></ng-container>
+        }
       </div>
+    } @else if (isTrashOpen()) {
+      <div class="section-label">Trash Content</div>
       <div class="items-list">
-        @for (item of currentItems(); track item) {
-          <div
-            class="sidebar-item"
-            [class.folder-item]="item.type === 'folder'"
-            [class.note-item]="item.type === 'note'"
-            [class.active]="activeNotePath() === item.path"
-            (click)="selectItem(item)">
+        @for (item of trashItems(); track item) {
+          <div class="sidebar-item trash-item">
             <span class="icon">
               <fa-icon [icon]="item.type === 'folder' ? faFolder : faFileAlt"></fa-icon>
             </span>
-            <span class="name">{{ item.type === 'note' ? item.name.replace('.md', '') : item.name }}</span>
-            @if (item.type === 'folder') {
-              <span class="meta">{{ item.childCount || 0 }} items</span>
-            }
+            <span class="name">{{ item.name }}</span>
+            <div class="item-actions">
+              <button class="restore-btn" (click)="restoreItem(item)" title="Restore">
+                <fa-icon [icon]="faUndo"></fa-icon>
+              </button>
+              <button class="delete-perm-btn" (click)="deleteItemPermanently(item)" title="Delete Permanently">
+                <fa-icon [icon]="faTrashAlt"></fa-icon>
+              </button>
+            </div>
           </div>
         }
-        @if (currentItems().length === 0) {
-          <div class="empty-state">
-            No {{ currentSubFolder() || currentNotebook() ? 'notes' : 'notebooks' }} yet.
-          </div>
+        @if (trashItems().length === 0) {
+          <div class="empty-state">Trash is empty.</div>
         }
       </div>
     } @else {
@@ -165,32 +164,101 @@
         </div>
       </div>
     }
-
   </div>
 
   <!-- Footer Section -->
-  @if (!isSettingsOpen()) {
+  @if (!isSettingsOpen() && !isTrashOpen()) {
     <div class="footer">
-      @if (!currentNotebook()) {
-        <button class="action-btn full-width" (click)="createNewNotebook()">
-          <fa-icon [icon]="faPlus" class="btn-icon"></fa-icon> New Notebook
+      <div class="split-actions">
+        <button class="action-btn" (click)="createNote('')" title="Create root note">
+          <fa-icon [icon]="faPlus" class="btn-icon"></fa-icon> Note
         </button>
-      }
-      @if (currentNotebook() && !currentSubFolder()) {
-        <div class="split-actions">
-          <button class="action-btn" (click)="createNewNote()">
-            <fa-icon [icon]="faPlus" class="btn-icon"></fa-icon> Note
-          </button>
-          <button class="action-btn" (click)="createNewFolder()">
-            <fa-icon [icon]="faPlus" class="btn-icon"></fa-icon> Folder
-          </button>
-        </div>
-      }
-      @if (currentSubFolder()) {
-        <button class="action-btn full-width" (click)="createNewNote()">
-          <fa-icon [icon]="faPlus" class="btn-icon"></fa-icon> New Note
+        <button class="action-btn" (click)="createFolder('')" title="Create root folder">
+          <fa-icon [icon]="faPlus" class="btn-icon"></fa-icon> Folder
         </button>
-      }
+      </div>
     </div>
   }
 </div>
+
+<!-- Recursive Node Template -->
+<ng-template #treeNodeTemplate let-items="items" let-depth="depth">
+  @for (item of items; track item.path) {
+    <div class="tree-item-wrapper">
+      <div
+        class="sidebar-item"
+        [class.folder-item]="item.type === 'folder'"
+        [class.note-item]="item.type === 'note'"
+        [class.active]="activeNotePath() === item.path"
+        [style.padding-left.px]="(depth * 14) + 12"
+        (click)="onItemClick(item); $event.stopPropagation()"
+        (contextmenu)="onContextMenu($event, item)">
+        
+        @if (item.type === 'folder') {
+          <span class="expand-icon" (click)="toggleFolder(item); $event.stopPropagation()">
+            <fa-icon [icon]="isExpanded(item.path) ? faChevronDown : faChevronRight"></fa-icon>
+          </span>
+        } @else {
+          <span class="spacer-icon"></span>
+        }
+        
+        <span class="icon">
+          <fa-icon [icon]="item.type === 'folder' ? faFolder : faFileAlt"></fa-icon>
+        </span>
+        
+        <span class="name">{{ item.type === 'note' ? item.name.replace('.md', '') : item.name }}</span>
+        
+        @if (item.type === 'folder') {
+          <span class="meta">{{ item.childCount || 0 }}</span>
+        }
+
+        @if (item.type === 'folder') {
+          <span class="more-actions-btn" (click)="onMoreActionsClick($event, item); $event.stopPropagation()" title="More actions">
+            <fa-icon [icon]="faEllipsisV"></fa-icon>
+          </span>
+        }
+      </div>
+
+      @if (item.type === 'folder' && isExpanded(item.path) && item.children) {
+        <ng-container *ngTemplateOutlet="treeNodeTemplate; context: { items: item.children, depth: depth + 1 }"></ng-container>
+      }
+    </div>
+  }
+</ng-template>
+
+<!-- Custom Context Menu -->
+@if (contextMenu(); as menu) {
+  <div class="context-menu" [style.top.px]="menu.y" [style.left.px]="menu.x" (click)="$event.stopPropagation()">
+    @if (menu.item) {
+      @if (menu.item.type === 'folder') {
+        <div class="menu-item" (click)="createNote(menu.item.path); closeContextMenu()">
+          <fa-icon [icon]="faPlus" class="menu-icon"></fa-icon> New Note
+        </div>
+        <div class="menu-item" (click)="createFolder(menu.item.path); closeContextMenu()">
+          <fa-icon [icon]="faFolder" class="menu-icon"></fa-icon> New Folder
+        </div>
+        <div class="menu-divider"></div>
+        <div class="menu-item" (click)="renameItem(menu.item); closeContextMenu()">
+          <fa-icon [icon]="faGear" class="menu-icon"></fa-icon> Rename
+        </div>
+        <div class="menu-item danger" (click)="deleteItem(menu.item); closeContextMenu()">
+          <fa-icon [icon]="faTrashAlt" class="menu-icon"></fa-icon> Delete
+        </div>
+      } @else {
+        <div class="menu-item" (click)="renameItem(menu.item); closeContextMenu()">
+          <fa-icon [icon]="faGear" class="menu-icon"></fa-icon> Rename
+        </div>
+        <div class="menu-item danger" (click)="deleteItem(menu.item); closeContextMenu()">
+          <fa-icon [icon]="faTrashAlt" class="menu-icon"></fa-icon> Delete
+        </div>
+      }
+    } @else {
+      <div class="menu-item" (click)="createNote(''); closeContextMenu()">
+        <fa-icon [icon]="faPlus" class="menu-icon"></fa-icon> New Note
+      </div>
+      <div class="menu-item" (click)="createFolder(''); closeContextMenu()">
+        <fa-icon [icon]="faFolder" class="menu-icon"></fa-icon> New Folder
+      </div>
+    }
+  </div>
+}

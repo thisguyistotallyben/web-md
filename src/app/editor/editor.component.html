@@ -50,6 +50,9 @@
       <button (click)="toggleItalic()" [class.active]="editor.isActive('italic')" title="Italic">
         <fa-icon [icon]="faItalic"></fa-icon>
       </button>
+      <button (click)="toggleSuperscript()" [class.active]="editor.isActive('superscript')" title="Superscript">
+        <fa-icon [icon]="faSuperscript"></fa-icon>
+      </button>
       <div class="divider"></div>
       <button (click)="toggleHeading(1)" [class.active]="editor.isActive('heading', { level: 1 })" title="Heading 1">H1</button>
       <button (click)="toggleHeading(2)" [class.active]="editor.isActive('heading', { level: 2 })" title="Heading 2">H2</button>
