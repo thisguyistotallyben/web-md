@@ -144,6 +144,556 @@ body.theme-gruvbox {
   --code-type: #fabd2f;
 }
 
+body.theme-hotdog {
+  --bg-deep: #ffffff;
+  --bg-surface: #d30000;
+  --bg-well: #000000;
+  --accent: #ffff00;
+  --text-main: #000000;
+  --text-muted: #555555;
+  --border-color: #000000;
+  --active-bg: rgba(255, 255, 0, 0.3);
+
+  /* Hot Dog Stand Code Colors */
+  --code-comment: #7f7f7f;
+  --code-keyword: #d30000;
+  --code-string: #008000;
+  --code-number: #0000ff;
+  --code-title: #000000;
+  --code-type: #d30000;
+
+  // Custom retro scrollbars
+  ::-webkit-scrollbar {
+    width: 16px !important;
+    height: 16px !important;
+    background-color: #d30000 !important;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #ffff00 !important;
+    border: 3px solid #000000 !important;
+    border-radius: 0px !important;
+    &:hover {
+      background-color: #ffffff !important;
+    }
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #d30000 !important;
+    border-left: 2px solid #000000 !important;
+  }
+
+  // Sidebar Overrides
+  .sidebar-wrapper {
+    background-color: #d30000 !important;
+    border-right: 4px solid #000000 !important;
+    color: #ffffff !important;
+
+    .header {
+      background-color: #000000 !important;
+      border-bottom: 3px solid #ffff00 !important;
+      padding: 0 1.5rem !important;
+      height: 60px !important;
+
+      .logo {
+        color: #ffff00 !important;
+        font-family: 'Courier New', monospace !important;
+        font-weight: 900 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        .brand-web {
+          color: #ffffff !important;
+        }
+      }
+
+      .settings-btn, .trash-btn, .back-btn {
+        color: #ffff00 !important;
+        opacity: 1 !important;
+        &:hover, &.active {
+          color: #ffffff !important;
+          background-color: transparent !important;
+        }
+      }
+
+      .view-title {
+        color: #ffff00 !important;
+        font-family: 'Courier New', monospace !important;
+        font-weight: bold !important;
+      }
+    }
+
+    .section-label {
+      color: #ffff00 !important;
+      font-weight: bold !important;
+      text-transform: uppercase !important;
+      font-size: 0.8rem !important;
+      letter-spacing: 0.05em !important;
+      border-bottom: 1px solid #000000 !important;
+      padding-bottom: 0.25rem !important;
+      margin-top: 1.5rem !important;
+    }
+
+    .nav-item {
+      color: #ffffff !important;
+      border: 2px solid transparent !important;
+      border-radius: 0px !important;
+      margin: 2px 4px !important;
+      padding: 0.5rem 0.75rem !important;
+      transition: none !important;
+
+      .icon {
+        color: #ffff00 !important;
+      }
+      
+      &:hover {
+        background-color: #ffff00 !important;
+        color: #000000 !important;
+        border: 2px solid #000000 !important;
+        .icon, .name, .meta, .expand-icon {
+          color: #000000 !important;
+        }
+      }
+
+      &.active {
+        background-color: #000000 !important;
+        color: #ffff00 !important;
+        border: 2px solid #ffff00 !important;
+        .icon, .name, .meta, .expand-icon {
+          color: #ffff00 !important;
+        }
+      }
+    }
+
+    .sidebar-item {
+      color: #ffffff !important;
+      font-family: 'Courier New', monospace !important;
+      font-weight: bold !important;
+      border-radius: 0px !important;
+      margin: 1px 0.5rem !important;
+      border: 2px solid transparent !important;
+      transition: none !important;
+
+      .name {
+        color: #ffffff !important;
+        font-weight: bold !important;
+      }
+
+      .icon, .expand-icon {
+        color: #ffff00 !important;
+        opacity: 1 !important;
+      }
+
+      &:hover {
+        background-color: #000000 !important;
+        color: #ffff00 !important;
+        border: 2px solid #ffff00 !important;
+        .name, .icon, .expand-icon {
+          color: #ffff00 !important;
+        }
+      }
+
+      &.active {
+        background-color: #000000 !important;
+        color: #ffff00 !important;
+        border: 2px solid #ffff00 !important;
+        .name, .icon, .expand-icon {
+          color: #ffff00 !important;
+          font-weight: 900 !important;
+        }
+        .meta {
+          border-color: #ffff00 !important;
+          background-color: #000000 !important;
+          color: #ffff00 !important;
+        }
+      }
+
+      .meta {
+        background-color: #ffff00 !important;
+        color: #000000 !important;
+        border: 1px solid #000000 !important;
+        font-weight: bold !important;
+        opacity: 1 !important;
+      }
+
+      .more-actions-btn {
+        color: #ffff00 !important;
+        opacity: 0.7 !important;
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.2) !important;
+          color: #ffffff !important;
+        }
+      }
+    }
+
+    .theme-option {
+      color: #ffffff !important;
+      border-radius: 0px !important;
+      margin: 2px 4px !important;
+      border: 1px solid transparent !important;
+      &:hover {
+        background-color: #000000 !important;
+        color: #ffff00 !important;
+        border: 1px solid #ffff00 !important;
+      }
+      &.active {
+        background-color: #ffff00 !important;
+        color: #000000 !important;
+        border: 1px solid #000000 !important;
+        font-weight: bold !important;
+      }
+    }
+
+    .footer {
+      background-color: #d30000 !important;
+      border-top: 4px solid #000000 !important;
+
+      .action-btn {
+        background-color: #ffff00 !important;
+        color: #000000 !important;
+        border: 3px solid #000000 !important;
+        border-radius: 0px !important;
+        font-weight: bold !important;
+        box-shadow: 3px 3px 0px #000000 !important;
+        text-transform: uppercase !important;
+        &:hover {
+          background-color: #ffffff !important;
+          color: #000000 !important;
+          transform: translate(-1px, -1px) !important;
+          box-shadow: 4px 4px 0px #000000 !important;
+        }
+        &:active {
+          transform: translate(1px, 1px) !important;
+          box-shadow: 1px 1px 0px #000000 !important;
+        }
+      }
+    }
+
+    // Settings elements
+    .password-change-form {
+      border: 2px solid #000000 !important;
+      background-color: #a00000 !important;
+      padding: 0.75rem !important;
+      margin: 0.5rem !important;
+      border-radius: 0px !important;
+
+      input {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border: 2px solid #000000 !important;
+        border-radius: 0px !important;
+      }
+
+      button {
+        background-color: #ffff00 !important;
+        color: #000000 !important;
+        border: 2px solid #000000 !important;
+        border-radius: 0px !important;
+        font-weight: bold !important;
+        &:hover {
+          background-color: #ffffff !important;
+        }
+      }
+    }
+  }
+
+  // Header Overrides
+  .editor-header {
+    background-color: #000000 !important;
+    border-bottom: 4px solid #000000 !important;
+    box-shadow: none !important;
+    height: 60px !important;
+
+    .note-title {
+      color: #ffff00 !important;
+      font-family: 'Courier New', monospace !important;
+      font-weight: bold !important;
+      font-size: 1.15rem !important;
+      text-transform: uppercase !important;
+      background-color: transparent !important;
+      border-radius: 0px !important;
+      border: 2px solid transparent !important;
+      &:hover {
+        border-color: #ffff00 !important;
+      }
+    }
+
+    .rename-input {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      border: 2px solid #ffff00 !important;
+      border-radius: 0px !important;
+    }
+
+    .actions .raw-toggle-btn {
+      background-color: #ffff00 !important;
+      color: #000000 !important;
+      border: 2px solid #000000 !important;
+      border-radius: 0px !important;
+      box-shadow: 2px 2px 0px #ffff00 !important;
+      &:hover, &.active {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+      }
+    }
+
+    .actions .action-menu-btn {
+      color: #ffff00 !important;
+      border: 2px solid transparent !important;
+      &:hover {
+        border-color: #ffff00 !important;
+        background-color: rgba(255, 255, 0, 0.1) !important;
+      }
+    }
+  }
+
+  // Sidebar toggler button (integrated in header)
+  .sidebar-toggle {
+    border-right: 4px solid #000000 !important;
+    background-color: #000000 !important;
+    color: #ffff00 !important;
+    &:hover {
+      background-color: #ffff00 !important;
+      color: #000000 !important;
+    }
+  }
+
+  // Editor Toolbar
+  .editor-toolbar {
+    background-color: #d30000 !important;
+    border-bottom: 3px solid #000000 !important;
+    gap: 0.5rem !important;
+
+    button {
+      background-color: #ffff00 !important;
+      color: #000000 !important;
+      border: 2px solid #000000 !important;
+      border-radius: 0px !important;
+      font-weight: bold !important;
+      font-family: 'Courier New', monospace !important;
+      box-shadow: 2px 2px 0px #000000 !important;
+      transition: none !important;
+
+      &:hover {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+      }
+
+      &.active {
+        background-color: #000000 !important;
+        color: #ffff00 !important;
+        border-color: #ffff00 !important;
+        box-shadow: none !important;
+        transform: translate(2px, 2px) !important;
+      }
+    }
+
+    .divider {
+      background-color: #000000 !important;
+      width: 3px !important;
+      height: 20px !important;
+      margin: 0 0.25rem !important;
+    }
+  }
+
+  // Editor Area & Content
+  .editor-body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    padding: 2rem 4rem !important;
+  }
+
+  .raw-editor {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 3px solid #000000 !important;
+    padding: 1rem !important;
+    font-family: 'Courier New', monospace !important;
+    border-radius: 0px !important;
+  }
+
+  .tiptap {
+    font-family: 'Courier New', Courier, monospace !important;
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+    color: #000000 !important;
+
+    p, li, h1, h2, h3, h4, code, pre {
+      color: #000000 !important;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Courier New', monospace !important;
+      font-weight: 900 !important;
+      border-bottom: 2px solid #000000 !important;
+      padding-bottom: 0.25rem !important;
+    }
+
+    blockquote {
+      border-left: 5px solid #d30000 !important;
+      background-color: #ffff00 !important;
+      color: #000000 !important;
+      padding: 0.75rem 1rem !important;
+      border-radius: 0px !important;
+      box-shadow: 3px 3px 0px #000000 !important;
+    }
+
+    code {
+      background-color: #ffff00 !important;
+      color: #000000 !important;
+      border: 1px solid #000000 !important;
+      border-radius: 0px !important;
+      font-weight: bold !important;
+    }
+
+    pre {
+      background-color: #000000 !important;
+      border: 3px solid #d30000 !important;
+      border-radius: 0px !important;
+      box-shadow: 4px 4px 0px #000000 !important;
+      code {
+        background-color: transparent !important;
+        color: #ffffff !important;
+        border: none !important;
+        font-weight: normal !important;
+      }
+    }
+  }
+
+  // Modals / Dialog boxes
+  .modal-content {
+    background-color: #d30000 !important;
+    border: 4px double #ffffff !important;
+    border-radius: 0px !important;
+    box-shadow: 10px 10px 0px #000000 !important;
+    outline: 4px solid #000000 !important;
+
+    .modal-header {
+      background-color: #000000 !important;
+      color: #ffff00 !important;
+      padding: 0.5rem 1rem !important;
+      font-family: 'Courier New', monospace !important;
+      font-weight: bold !important;
+      text-transform: uppercase !important;
+      border-bottom: 3px solid #000000 !important;
+      text-align: center !important;
+    }
+
+    .modal-body {
+      padding: 1.5rem !important;
+      input {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border: 3px solid #000000 !important;
+        border-radius: 0px !important;
+        font-family: 'Courier New', monospace !important;
+        font-weight: bold !important;
+      }
+    }
+
+    .modal-footer {
+      background-color: #d30000 !important;
+      border-top: none !important;
+
+      button {
+        border-radius: 0px !important;
+        font-family: 'Courier New', monospace !important;
+        font-weight: bold !important;
+        padding: 0.5rem 1.5rem !important;
+        text-transform: uppercase !important;
+        transition: none !important;
+      }
+
+      .cancel-btn {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border: 3px solid #000000 !important;
+        box-shadow: 3px 3px 0px #000000 !important;
+        &:hover {
+          background-color: #ffff00 !important;
+        }
+      }
+
+      .confirm-btn {
+        background-color: #ffff00 !important;
+        color: #000000 !important;
+        border: 3px solid #000000 !important;
+        box-shadow: 3px 3px 0px #000000 !important;
+        &:hover:not(:disabled) {
+          background-color: #ffffff !important;
+        }
+      }
+    }
+  }
+
+  // Action / Context menu popup
+  .action-popup {
+    background-color: #ffffff !important;
+    border: 3px solid #000000 !important;
+    border-radius: 0px !important;
+    box-shadow: 5px 5px 0px #000000 !important;
+    padding: 4px !important;
+
+    button {
+      border-radius: 0px !important;
+      color: #000000 !important;
+      font-family: 'Courier New', monospace !important;
+      font-weight: bold !important;
+      &:hover {
+        background-color: #d30000 !important;
+        color: #ffffff !important;
+      }
+    }
+  }
+
+  // Command Palette Overrides
+  .modal-backdrop {
+    background-color: rgba(211, 0, 0, 0.4) !important;
+  }
+  .palette-container {
+    background-color: #ffffff !important;
+    border: 4px solid #000000 !important;
+    box-shadow: 10px 10px 0px #000000 !important;
+    border-radius: 0px !important;
+    overflow: hidden !important;
+
+    .search-box {
+      background-color: #ffff00 !important;
+      border-bottom: 4px solid #000000 !important;
+      input {
+        color: #000000 !important;
+        font-family: 'Courier New', monospace !important;
+        font-weight: bold !important;
+        &::placeholder {
+          color: #555555 !important;
+        }
+      }
+      .search-icon {
+        color: #000000 !important;
+      }
+    }
+
+    .command-item {
+      border-bottom: 1px solid #e0e0e0 !important;
+      border-radius: 0px !important;
+      .command-name {
+        color: #000000 !important;
+        font-weight: bold !important;
+      }
+      .command-desc {
+        color: #555555 !important;
+      }
+      .command-icon {
+        color: #d30000 !important;
+      }
+
+      &:hover, &.selected {
+        background-color: #d30000 !important;
+        .command-name, .command-desc, .command-icon {
+          color: #ffffff !important;
+        }
+      }
+    }
+  }
+}
+
 html, body {
   height: 100%;
   height: -webkit-fill-available;

@@ -127,6 +127,14 @@
               <span class="check">✓</span>
             }
           </div>
+          <div class="theme-option theme-option-hotdog"
+            [class.active]="themeService.currentTheme() === 'hotdog'"
+            (click)="setTheme('hotdog')">
+            <span class="theme-name">🌭 Hot Dog Stand</span>
+            @if (themeService.currentTheme() === 'hotdog') {
+              <span class="check">✓</span>
+            }
+          </div>
         </div>
         <div class="section-label">System</div>
         <div class="system-actions">

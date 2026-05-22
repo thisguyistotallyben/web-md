@@ -214,6 +214,15 @@ export class CommandPaletteComponent {
       }
     },
     {
+      name: 'Change Theme: Hot Dog Stand',
+      description: 'Set system theme to Windows 3.1 Hot Dog Stand nostalgia',
+      icon: this.faAdjust,
+      action: () => {
+        this.themeService.setTheme('hotdog');
+        this.close();
+      }
+    },
+    {
       name: 'Restart Server Process',
       description: 'Perform a clean restart of the backend Node.js system',
       icon: this.faPowerOff,
