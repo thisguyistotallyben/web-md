@@ -392,6 +392,51 @@ body.theme-hotdog {
         }
       }
     }
+
+    .restart-btn, .logout-btn {
+      border-radius: 0px !important;
+      font-weight: bold !important;
+      text-transform: uppercase !important;
+      border: 3px solid #000000 !important;
+      font-family: 'Courier New', monospace !important;
+      transition: all 0.2s !important;
+    }
+
+    .restart-btn {
+      background-color: #ffff00 !important;
+      color: #000000 !important;
+      box-shadow: 3px 3px 0px #000000 !important;
+
+      &:hover {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        box-shadow: 4px 4px 0px #000000 !important;
+        transform: translate(-1px, -1px) !important;
+      }
+      &:active {
+        box-shadow: 1px 1px 0px #000000 !important;
+        transform: translate(1px, 1px) !important;
+      }
+    }
+
+    .logout-btn {
+      background-color: #000000 !important;
+      color: #ffff00 !important;
+      box-shadow: 3px 3px 0px #ffff00 !important;
+      border-color: #ffff00 !important;
+
+      &:hover {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        box-shadow: 4px 4px 0px #ffffff !important;
+        border-color: #ffffff !important;
+        transform: translate(-1px, -1px) !important;
+      }
+      &:active {
+        box-shadow: 1px 1px 0px #ffff00 !important;
+        transform: translate(1px, 1px) !important;
+      }
+    }
   }
 
   // Header Overrides
