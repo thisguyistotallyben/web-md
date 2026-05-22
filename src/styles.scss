@@ -930,16 +930,23 @@ body.theme-win98 {
 
   // Sidebar Overrides
   .sidebar-wrapper {
-    background-color: #008080 !important; // Redmond Teal Desktop
-    border-right: 3px solid #c0c0c0 !important;
-    box-shadow: inset -1px 0px 0px #808080 !important;
+    background-color: #c0c0c0 !important; // Redmond Gray
+    border-right: none !important;
+    box-shadow: none !important;
     color: #000000 !important;
+  }
 
+  .sidebar {
+    background-color: #c0c0c0 !important;
+    border-right: none !important;
+  }
+
+  .sidebar-wrapper {
     .header {
       background: linear-gradient(90deg, #000080, #1084d0) !important;
       border-bottom: 2px solid #c0c0c0 !important;
       padding: 0 0.75rem !important;
-      height: 40px !important;
+      height: 38px !important;
       align-items: center !important;
       margin: 4px !important;
       border: 1px solid !important;
@@ -990,7 +997,7 @@ body.theme-win98 {
     }
 
     .content {
-      background-color: #008080 !important;
+      background-color: #c0c0c0 !important;
       padding: 4px !important;
       overflow-x: hidden !important;
     }
@@ -1321,22 +1328,29 @@ body.theme-win98 {
 
   // Sidebar toggler button (integrated in header)
   .sidebar-toggle {
-    border-right: 1px solid #808080 !important;
+    border: 1px solid !important;
+    border-color: #ffffff #808080 #808080 #ffffff !important;
     background-color: #c0c0c0 !important;
     color: #000000 !important;
-    box-shadow: inset 0 1px 0px #ffffff !important;
-    width: 40px !important;
-    height: 42px !important;
+    box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #808080, 1px 1px 0px #000000 !important;
+    border-radius: 0px !important;
+    width: 28px !important;
+    height: 28px !important;
+    top: 7px !important;
+    margin-left: 6px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
+    padding: 0 !important;
     
     &:hover {
-      background-color: #d8d8d8 !important;
+      background-color: #c0c0c0 !important;
     }
     
     &:active {
-      background-color: #e0e0e0 !important;
+      border-color: #808080 #ffffff #ffffff #808080 !important;
+      box-shadow: inset 1px 1px 0px #808080, inset -1px -1px 0px #ffffff, 1px 1px 0px #000000 !important;
+      padding: 1px 0 0 1px !important;
     }
   }
 
