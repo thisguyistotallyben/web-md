@@ -231,6 +231,10 @@ body.theme-hotdog {
       margin-top: 1.5rem !important;
     }
 
+    .tree-container {
+      border-radius: 0px !important;
+    }
+
     .nav-item {
       color: #ffffff !important;
       border: 2px solid transparent !important;
@@ -996,6 +1000,7 @@ body.theme-win98 {
       border: 2px solid !important;
       border-color: #808080 #ffffff #ffffff #808080 !important;
       box-shadow: inset 1px 1px 0px #000000, 1px 1px 0px #ffffff !important;
+      border-radius: 0px !important;
       padding: 4px !important;
       margin: 4px !important;
       width: calc(100% - 8px) !important;
