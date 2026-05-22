@@ -135,6 +135,14 @@
               <span class="check">✓</span>
             }
           </div>
+          <div class="theme-option theme-option-win98"
+            [class.active]="themeService.currentTheme() === 'win98'"
+            (click)="setTheme('win98')">
+            <span class="theme-name">💾 Windows 98</span>
+            @if (themeService.currentTheme() === 'win98') {
+              <span class="check">✓</span>
+            }
+          </div>
         </div>
         <div class="section-label">System</div>
         <div class="system-actions">

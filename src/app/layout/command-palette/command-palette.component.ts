@@ -223,6 +223,15 @@ export class CommandPaletteComponent {
       }
     },
     {
+      name: 'Change Theme: Windows 98',
+      description: 'Set system theme to classic Windows 98 Redmond Teal nostalgia',
+      icon: this.faAdjust,
+      action: () => {
+        this.themeService.setTheme('win98');
+        this.close();
+      }
+    },
+    {
       name: 'Restart Server Process',
       description: 'Perform a clean restart of the backend Node.js system',
       icon: this.faPowerOff,

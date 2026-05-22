@@ -1,7 +1,7 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-export type Theme = 'dark' | 'light' | 'sepia' | 'sepia-dark' | 'high-contrast' | 'dark-hc' | 'gruvbox' | 'hotdog';
+export type Theme = 'dark' | 'light' | 'sepia' | 'sepia-dark' | 'high-contrast' | 'dark-hc' | 'gruvbox' | 'hotdog' | 'win98';
 
 export interface AppSettings {
   theme: Theme;
@@ -43,7 +43,7 @@ export class ThemeService {
 
   setTheme(theme: Theme, save: boolean = true) {
     // Remove all theme classes
-    document.body.classList.remove('theme-light', 'theme-sepia', 'theme-sepia-dark', 'theme-high-contrast', 'theme-dark-hc', 'theme-gruvbox', 'theme-hotdog');
+    document.body.classList.remove('theme-light', 'theme-sepia', 'theme-sepia-dark', 'theme-high-contrast', 'theme-dark-hc', 'theme-gruvbox', 'theme-hotdog', 'theme-win98');
     
     // Add new class if needed
     if (theme === 'light') document.body.classList.add('theme-light');
@@ -53,6 +53,7 @@ export class ThemeService {
     if (theme === 'dark-hc') document.body.classList.add('theme-dark-hc');
     if (theme === 'gruvbox') document.body.classList.add('theme-gruvbox');
     if (theme === 'hotdog') document.body.classList.add('theme-hotdog');
+    if (theme === 'win98') document.body.classList.add('theme-win98');
     
     this.currentTheme.set(theme);
     localStorage.setItem('app_theme', theme);

@@ -694,6 +694,774 @@ body.theme-hotdog {
   }
 }
 
+body.theme-win98 {
+  --bg-deep: #ffffff;
+  --bg-surface: #c0c0c0;
+  --bg-well: #ffffff;
+  --accent: #000080;
+  --text-main: #000000;
+  --text-muted: #808080;
+  --border-color: #808080;
+  --active-bg: #000080;
+
+  /* Redmond Code Colors */
+  --code-comment: #808080;
+  --code-keyword: #0000ff;
+  --code-string: #008000;
+  --code-number: #800080;
+  --code-title: #000000;
+  --code-type: #000080;
+
+  // Custom retro scrollbars
+  ::-webkit-scrollbar {
+    width: 16px !important;
+    height: 16px !important;
+    background-color: #e0e0e0 !important;
+    background-image: 
+      linear-gradient(45deg, #c0c0c0 25%, transparent 25%), 
+      linear-gradient(-45deg, #c0c0c0 25%, transparent 25%), 
+      linear-gradient(45deg, transparent 75%, #c0c0c0 75%), 
+      linear-gradient(-45deg, transparent 75%, #c0c0c0 75%) !important;
+    background-size: 4px 4px !important;
+    background-position: 0 0, 0 2px, 2px -2px, -2px 0 !important;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #c0c0c0 !important;
+    border: 1px solid !important;
+    border-color: #ffffff #808080 #808080 #ffffff !important;
+    box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #808080, 1px 1px 0px #000000 !important;
+    border-radius: 0px !important;
+    &:active {
+      border-color: #808080 #ffffff #ffffff #808080 !important;
+      box-shadow: inset 1px 1px 0px #808080, inset -1px -1px 0px #ffffff, 1px 1px 0px #000000 !important;
+    }
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #dfdfdf !important;
+  }
+
+  // Sidebar Overrides
+  .sidebar-wrapper {
+    background-color: #008080 !important; // Redmond Teal Desktop
+    border-right: 3px solid #c0c0c0 !important;
+    box-shadow: inset -1px 0px 0px #808080 !important;
+    color: #000000 !important;
+
+    .header {
+      background: linear-gradient(90deg, #000080, #1084d0) !important;
+      border-bottom: 2px solid #c0c0c0 !important;
+      padding: 0 0.75rem !important;
+      height: 40px !important;
+      align-items: center !important;
+      margin: 4px !important;
+      border: 1px solid !important;
+      border-color: #ffffff #808080 #808080 #ffffff !important;
+      box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #808080, 1px 1px 0px #000000 !important;
+
+      .logo {
+        color: #ffffff !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif !important;
+        font-weight: bold !important;
+        font-size: 0.95rem !important;
+        letter-spacing: 0.02em !important;
+        .brand-web {
+          color: #ffffff !important;
+        }
+      }
+
+      .settings-btn, .trash-btn, .back-btn {
+        color: #000000 !important;
+        background-color: #c0c0c0 !important;
+        border: 1px solid !important;
+        border-color: #ffffff #808080 #808080 #ffffff !important;
+        box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #808080, 1px 1px 0px #000000 !important;
+        border-radius: 0px !important;
+        width: 22px !important;
+        height: 22px !important;
+        padding: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        opacity: 1 !important;
+        font-size: 0.8rem !important;
+        margin-left: 4px !important;
+        
+        &:active {
+          border-color: #808080 #ffffff #ffffff #808080 !important;
+          box-shadow: inset 1px 1px 0px #808080, inset -1px -1px 0px #ffffff, 1px 1px 0px #000000 !important;
+          padding: 1px 0 0 1px !important;
+        }
+      }
+
+      .view-title {
+        color: #ffffff !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif !important;
+        font-weight: bold !important;
+        font-size: 0.95rem !important;
+      }
+    }
+
+    .content {
+      background-color: #008080 !important;
+      padding: 4px !important;
+      overflow-x: hidden !important;
+    }
+
+    .tree-container {
+      background-color: #ffffff !important;
+      border: 2px solid !important;
+      border-color: #808080 #ffffff #ffffff #808080 !important;
+      box-shadow: inset 1px 1px 0px #000000, 1px 1px 0px #ffffff !important;
+      padding: 4px !important;
+      margin: 4px !important;
+      height: calc(100% - 8px) !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+    }
+
+    .section-label {
+      color: #000000 !important;
+      font-weight: bold !important;
+      font-size: 0.85rem !important;
+      padding: 0.25rem 0.5rem !important;
+      border-bottom: 2px ridge #ffffff !important;
+      margin-top: 1rem !important;
+      margin-bottom: 0.5rem !important;
+    }
+
+    .sidebar-item {
+      color: #000000 !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif !important;
+      border-radius: 0px !important;
+      margin: 1px 0 !important;
+      border: 1px solid transparent !important;
+      transition: none !important;
+      padding: 3px 6px !important;
+
+      .name {
+        color: #000000 !important;
+      }
+
+      .icon, .expand-icon {
+        color: #808080 !important;
+        opacity: 1 !important;
+      }
+
+      &:hover {
+        background-color: rgba(0, 0, 128, 0.08) !important;
+      }
+
+      &.active {
+        background-color: #000080 !important;
+        color: #ffffff !important;
+        .name, .icon, .expand-icon {
+          color: #ffffff !important;
+        }
+        .meta {
+          border-color: #ffffff !important;
+          background-color: #000080 !important;
+          color: #ffffff !important;
+        }
+      }
+
+      .meta {
+        background-color: #c0c0c0 !important;
+        color: #000000 !important;
+        border: 1px solid #808080 !important;
+        border-radius: 0px !important;
+        font-weight: normal !important;
+        opacity: 1 !important;
+        padding: 0 4px !important;
+      }
+
+      .more-actions-btn {
+        color: #808080 !important;
+        &:hover {
+          background-color: #c0c0c0 !important;
+          color: #000000 !important;
+        }
+      }
+    }
+
+    .settings-view {
+      background-color: #c0c0c0 !important;
+      border: 1px solid !important;
+      border-color: #ffffff #808080 #808080 #ffffff !important;
+      box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #808080, 1px 1px 0px #000000 !important;
+      margin: 4px !important;
+      padding: 8px !important;
+      height: calc(100% - 8px) !important;
+      overflow-y: auto !important;
+    }
+
+    .items-list {
+      background-color: #ffffff !important;
+      border: 2px solid !important;
+      border-color: #808080 #ffffff #ffffff #808080 !important;
+      box-shadow: inset 1px 1px 0px #000000, 1px 1px 0px #ffffff !important;
+      padding: 4px !important;
+      margin: 4px !important;
+      min-height: 120px !important;
+    }
+
+    .theme-options {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 3px !important;
+    }
+
+    .theme-option {
+      color: #000000 !important;
+      background-color: #ffffff !important;
+      border: 1px solid !important;
+      border-color: #808080 #ffffff #ffffff #808080 !important;
+      box-shadow: inset 1px 1px 0px #000000 !important;
+      border-radius: 0px !important;
+      padding: 4px 8px !important;
+      margin: 0 !important;
+      
+      &:hover {
+        background-color: #f0f0f0 !important;
+      }
+      
+      &.active {
+        background-color: #000080 !important;
+        color: #ffffff !important;
+        border-color: #000080 !important;
+        box-shadow: none !important;
+        .check {
+          color: #ffffff !important;
+        }
+      }
+    }
+
+    .footer {
+      background-color: #c0c0c0 !important;
+      border-top: 1px solid #808080 !important;
+      padding: 8px 12px !important;
+      box-shadow: inset 0 1px 0px #ffffff !important;
+
+      .split-actions {
+        gap: 8px !important;
+      }
+
+      .action-btn {
+        background-color: #c0c0c0 !important;
+        color: #000000 !important;
+        border: 1px solid !important;
+        border-color: #ffffff #808080 #808080 #ffffff !important;
+        box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #808080, 1px 1px 0px #000000 !important;
+        border-radius: 0px !important;
+        font-weight: bold !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif !important;
+        padding: 6px 12px !important;
+        font-size: 0.85rem !important;
+        text-shadow: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        
+        .btn-icon {
+          color: #008000 !important;
+          margin-right: 4px !important;
+        }
+
+        &:hover {
+          background-color: #d8d8d8 !important;
+        }
+        
+        &:active {
+          border-color: #808080 #ffffff #ffffff #808080 !important;
+          box-shadow: inset 1px 1px 0px #808080, inset -1px -1px 0px #ffffff, 1px 1px 0px #000000 !important;
+          padding: 7px 11px 5px 13px !important;
+        }
+      }
+    }
+
+    // Settings elements
+    .password-change-form {
+      border: 1px solid !important;
+      border-color: #808080 #ffffff #ffffff #808080 !important;
+      box-shadow: inset 1px 1px 0px #000000, 1px 1px 0px #ffffff !important;
+      background-color: #d8d8d8 !important;
+      padding: 0.75rem !important;
+      margin: 0.5rem 0 !important;
+      border-radius: 0px !important;
+
+      .form-title {
+        color: #000000 !important;
+        font-weight: bold !important;
+        font-size: 0.85rem !important;
+      }
+
+      input {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border: 1px solid !important;
+        border-color: #808080 #ffffff #ffffff #808080 !important;
+        box-shadow: inset 1px 1px 0px #000000 !important;
+        border-radius: 0px !important;
+        padding: 4px 6px !important;
+        margin-bottom: 6px !important;
+      }
+
+      button {
+        background-color: #c0c0c0 !important;
+        color: #000000 !important;
+        border: 1px solid !important;
+        border-color: #ffffff #808080 #808080 #ffffff !important;
+        box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #808080, 1px 1px 0px #000000 !important;
+        border-radius: 0px !important;
+        font-weight: bold !important;
+        padding: 4px 10px !important;
+        
+        &:active {
+          border-color: #808080 #ffffff #ffffff #808080 !important;
+          box-shadow: inset 1px 1px 0px #808080, inset -1px -1px 0px #ffffff, 1px 1px 0px #000000 !important;
+        }
+      }
+    }
+  }
+
+  // Header Overrides
+  .editor-header {
+    background-color: #c0c0c0 !important;
+    border-bottom: 2px solid #808080 !important;
+    box-shadow: inset 0 1px 0px #ffffff !important;
+    height: 42px !important;
+    padding: 4px 8px !important;
+
+    .note-title {
+      color: #000000 !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif !important;
+      font-weight: bold !important;
+      font-size: 1.05rem !important;
+      background-color: #ffffff !important;
+      border: 1px solid !important;
+      border-color: #808080 #ffffff #ffffff #808080 !important;
+      box-shadow: inset 1px 1px 0px #000000 !important;
+      border-radius: 0px !important;
+      padding: 2px 6px !important;
+      height: 28px !important;
+    }
+
+    .rename-input {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      border: 1px solid !important;
+      border-color: #808080 #ffffff #ffffff #808080 !important;
+      box-shadow: inset 1px 1px 0px #000000 !important;
+      border-radius: 0px !important;
+      height: 28px !important;
+    }
+
+    .actions .raw-toggle-btn {
+      background-color: #c0c0c0 !important;
+      color: #000000 !important;
+      border: 1px solid !important;
+      border-color: #ffffff #808080 #808080 #ffffff !important;
+      box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #808080, 1px 1px 0px #000000 !important;
+      border-radius: 0px !important;
+      font-weight: bold !important;
+      font-size: 0.85rem !important;
+      padding: 4px 10px !important;
+      height: 28px !important;
+      
+      &:hover {
+        background-color: #d8d8d8 !important;
+      }
+      
+      &:active, &.active {
+        border-color: #808080 #ffffff #ffffff #808080 !important;
+        box-shadow: inset 1px 1px 0px #808080, inset -1px -1px 0px #ffffff, 1px 1px 0px #000000 !important;
+        background-color: #e0e0e0 !important;
+      }
+    }
+
+    .actions .action-menu-btn {
+      color: #000000 !important;
+      background-color: #c0c0c0 !important;
+      border: 1px solid !important;
+      border-color: #ffffff #808080 #808080 #ffffff !important;
+      box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #808080, 1px 1px 0px #000000 !important;
+      border-radius: 0px !important;
+      width: 28px !important;
+      height: 28px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 0 !important;
+      
+      &:hover {
+        background-color: #d8d8d8 !important;
+      }
+      
+      &:active {
+        border-color: #808080 #ffffff #ffffff #808080 !important;
+        box-shadow: inset 1px 1px 0px #808080, inset -1px -1px 0px #ffffff, 1px 1px 0px #000000 !important;
+      }
+    }
+  }
+
+  // Sidebar toggler button (integrated in header)
+  .sidebar-toggle {
+    border-right: 1px solid #808080 !important;
+    background-color: #c0c0c0 !important;
+    color: #000000 !important;
+    box-shadow: inset 0 1px 0px #ffffff !important;
+    width: 40px !important;
+    height: 42px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    
+    &:hover {
+      background-color: #d8d8d8 !important;
+    }
+    
+    &:active {
+      background-color: #e0e0e0 !important;
+    }
+  }
+
+  // Editor Toolbar
+  .editor-toolbar {
+    background-color: #c0c0c0 !important;
+    border-bottom: 2px solid #808080 !important;
+    box-shadow: inset 0 1px 0px #ffffff !important;
+    gap: 4px !important;
+    padding: 4px 8px !important;
+
+    button {
+      background-color: #c0c0c0 !important;
+      color: #000000 !important;
+      border: 1px solid !important;
+      border-color: #ffffff #808080 #808080 #ffffff !important;
+      box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #808080, 1px 1px 0px #000000 !important;
+      border-radius: 0px !important;
+      font-weight: bold !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif !important;
+      font-size: 0.85rem !important;
+      padding: 4px 8px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: none !important;
+
+      &:hover {
+        background-color: #d8d8d8 !important;
+      }
+
+      &:active, &.active {
+        border-color: #808080 #ffffff #ffffff #808080 !important;
+        box-shadow: inset 1px 1px 0px #808080, inset -1px -1px 0px #ffffff, 1px 1px 0px #000000 !important;
+        background-color: #dfdfdf !important;
+      }
+    }
+
+    .divider {
+      background-color: #808080 !important;
+      border-right: 1px solid #ffffff !important;
+      width: 2px !important;
+      height: 20px !important;
+      margin: 0 4px !important;
+    }
+  }
+
+  // Editor Area & Content
+  .editor-body {
+    background-color: #008080 !important; // Redmond Teal Desktop
+    padding: 16px !important;
+  }
+
+  .raw-editor {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid !important;
+    border-color: #808080 #ffffff #ffffff #808080 !important;
+    box-shadow: inset 1px 1px 0px #000000, 1px 1px 0px #ffffff !important;
+    padding: 1rem !important;
+    font-family: 'Courier New', monospace !important;
+    border-radius: 0px !important;
+    height: 100% !important;
+  }
+
+  .tiptap-wrapper {
+    background-color: #ffffff !important;
+    border: 2px solid !important;
+    border-color: #808080 #ffffff #ffffff #808080 !important;
+    box-shadow: inset 1px 1px 0px #000000, 1px 1px 0px #ffffff !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+  }
+
+  .tiptap {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif !important;
+    font-size: 15px !important;
+    line-height: 1.5 !important;
+    color: #000000 !important;
+    background-color: #ffffff !important;
+    padding: 24px !important;
+    min-height: 100% !important;
+
+    p, li, h1, h2, h3, h4, code, pre {
+      color: #000000 !important;
+    }
+
+    h1, h2, h3 {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif !important;
+      font-weight: bold !important;
+      border-bottom: 2px ridge #c0c0c0 !important;
+      padding-bottom: 0.25rem !important;
+      margin-top: 1.5rem !important;
+    }
+
+    blockquote {
+      border-left: 4px solid #000080 !important;
+      background-color: #e0e0e0 !important;
+      color: #000000 !important;
+      padding: 0.5rem 1rem !important;
+      border-radius: 0px !important;
+      border: 1px solid !important;
+      border-color: #808080 #ffffff #ffffff #808080 !important;
+      box-shadow: inset 1px 1px 0px #000000 !important;
+    }
+
+    code {
+      background-color: #e0e0e0 !important;
+      color: #000000 !important;
+      border: 1px solid #808080 !important;
+      border-radius: 0px !important;
+      padding: 1px 4px !important;
+      font-family: 'Courier New', Courier, monospace !important;
+      font-weight: normal !important;
+    }
+
+    pre {
+      background-color: #f5f5f5 !important;
+      border: 1px solid !important;
+      border-color: #808080 #ffffff #ffffff #808080 !important;
+      box-shadow: inset 1px 1px 0px #000000 !important;
+      border-radius: 0px !important;
+      padding: 12px !important;
+      
+      code {
+        background-color: transparent !important;
+        color: #000000 !important;
+        border: none !important;
+        font-weight: normal !important;
+        padding: 0 !important;
+      }
+    }
+  }
+
+  // Modals / Dialog boxes
+  .modal-content {
+    background-color: #c0c0c0 !important;
+    border: 1px solid !important;
+    border-color: #ffffff #808080 #808080 #ffffff !important;
+    box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #808080, 2px 2px 0px #000000 !important;
+    border-radius: 0px !important;
+    outline: none !important;
+    padding: 3px !important;
+
+    .modal-header {
+      background: linear-gradient(90deg, #000080, #1084d0) !important;
+      color: #ffffff !important;
+      padding: 4px 8px !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif !important;
+      font-weight: bold !important;
+      border-bottom: none !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+    }
+
+    .modal-body {
+      padding: 1rem !important;
+      background-color: #c0c0c0 !important;
+      
+      input {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border: 1px solid !important;
+        border-color: #808080 #ffffff #ffffff #808080 !important;
+        box-shadow: inset 1px 1px 0px #000000 !important;
+        border-radius: 0px !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif !important;
+        padding: 4px 8px !important;
+      }
+    }
+
+    .modal-footer {
+      background-color: #c0c0c0 !important;
+      border-top: none !important;
+      padding: 0.5rem 1rem 1rem 1rem !important;
+      gap: 8px !important;
+
+      button {
+        border-radius: 0px !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif !important;
+        font-weight: bold !important;
+        padding: 4px 16px !important;
+        transition: none !important;
+        font-size: 0.85rem !important;
+      }
+
+      .cancel-btn {
+        background-color: #c0c0c0 !important;
+        color: #000000 !important;
+        border: 1px solid !important;
+        border-color: #ffffff #808080 #808080 #ffffff !important;
+        box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #808080, 1px 1px 0px #000000 !important;
+        
+        &:hover {
+          background-color: #d8d8d8 !important;
+        }
+        
+        &:active {
+          border-color: #808080 #ffffff #ffffff #808080 !important;
+          box-shadow: inset 1px 1px 0px #808080, inset -1px -1px 0px #ffffff, 1px 1px 0px #000000 !important;
+        }
+      }
+
+      .confirm-btn {
+        background-color: #c0c0c0 !important;
+        color: #000000 !important;
+        border: 1px solid !important;
+        border-color: #ffffff #808080 #808080 #ffffff !important;
+        box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #808080, 1px 1px 0px #000000 !important;
+        
+        &:hover:not(:disabled) {
+          background-color: #d8d8d8 !important;
+        }
+        
+        &:active:not(:disabled) {
+          border-color: #808080 #ffffff #ffffff #808080 !important;
+          box-shadow: inset 1px 1px 0px #808080, inset -1px -1px 0px #ffffff, 1px 1px 0px #000000 !important;
+        }
+      }
+    }
+  }
+
+  // Action / Context menu popup
+  .context-menu, .action-popup {
+    background-color: #c0c0c0 !important;
+    border: 1px solid !important;
+    border-color: #ffffff #808080 #808080 #ffffff !important;
+    box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #808080, 2px 2px 0px #000000 !important;
+    border-radius: 0px !important;
+    padding: 2px !important;
+
+    .menu-item, button {
+      border-radius: 0px !important;
+      color: #000000 !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif !important;
+      font-weight: normal !important;
+      padding: 4px 16px !important;
+      font-size: 0.85rem !important;
+      
+      &:hover {
+        background-color: #000080 !important;
+        color: #ffffff !important;
+        
+        .menu-icon {
+          color: #ffffff !important;
+        }
+      }
+
+      .menu-icon {
+        color: #555555 !important;
+      }
+    }
+    
+    .menu-divider {
+      height: 2px !important;
+      border-top: 1px solid #808080 !important;
+      border-bottom: 1px solid #ffffff !important;
+      background: none !important;
+      margin: 3px 1px !important;
+    }
+  }
+
+  // Command Palette Overrides
+  .modal-backdrop {
+    background-color: rgba(0, 128, 128, 0.4) !important; // Transparent teal backdrop
+  }
+  
+  .palette-container {
+    background-color: #c0c0c0 !important;
+    border: 1px solid !important;
+    border-color: #ffffff #808080 #808080 #ffffff !important;
+    box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #808080, 4px 4px 0px #000000 !important;
+    border-radius: 0px !important;
+    overflow: hidden !important;
+    padding: 3px !important;
+
+    .search-box {
+      background-color: #c0c0c0 !important;
+      border-bottom: 1px solid #808080 !important;
+      padding: 6px !important;
+      display: flex !important;
+      align-items: center !important;
+      
+      input {
+        color: #000000 !important;
+        background-color: #ffffff !important;
+        border: 1px solid !important;
+        border-color: #808080 #ffffff #ffffff #808080 !important;
+        box-shadow: inset 1px 1px 0px #000000 !important;
+        border-radius: 0px !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif !important;
+        padding: 4px 8px !important;
+        height: 28px !important;
+        
+        &::placeholder {
+          color: #808080 !important;
+        }
+      }
+      .search-icon {
+        color: #808080 !important;
+        margin-left: 4px !important;
+      }
+    }
+
+    .palette-results {
+      background-color: #ffffff !important;
+      border: 1px solid !important;
+      border-color: #808080 #ffffff #ffffff #808080 !important;
+      box-shadow: inset 1px 1px 0px #000000 !important;
+      margin-top: 4px !important;
+      max-height: 300px !important;
+      overflow-y: auto !important;
+    }
+
+    .command-item, .result-item {
+      border-bottom: 1px solid #f0f0f0 !important;
+      border-radius: 0px !important;
+      padding: 6px 12px !important;
+      
+      .command-name, .name {
+        color: #000000 !important;
+        font-weight: bold !important;
+      }
+      .command-desc, .description {
+        color: #808080 !important;
+      }
+      .command-icon, .icon {
+        color: #000080 !important;
+      }
+
+      &:hover, &.selected, &.active {
+        background-color: #000080 !important;
+        .command-name, .name, .command-desc, .description, .command-icon, .icon {
+          color: #ffffff !important;
+        }
+      }
+    }
+  }
+}
+
 html, body {
   height: 100%;
   height: -webkit-fill-available;
