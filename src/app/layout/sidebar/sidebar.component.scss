@@ -348,8 +348,10 @@
 
   .theme-option {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 0.75rem 1.25rem; cursor: pointer; color: var(--text-muted); font-size: 0.9rem;
+    padding: 0.45rem 0.75rem; cursor: pointer; color: var(--text-muted); font-size: 0.88rem;
     transition: all 0.2s;
+    border-radius: var(--radius-sm);
+    margin: 1px 0.5rem;
     &:hover { background-color: rgba(255, 255, 255, 0.03); color: var(--text-main); }
     &.active { 
       color: var(--accent); 
