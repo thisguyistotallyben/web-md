@@ -568,6 +568,16 @@ body.theme-hotdog {
       color: #000000 !important;
     }
 
+    a {
+      color: #d30000 !important;
+      text-decoration: underline !important;
+      font-weight: bold !important;
+
+      &:hover {
+        color: #000000 !important;
+      }
+    }
+
     h1, h2, h3 {
       font-family: 'Courier New', monospace !important;
       font-weight: 900 !important;
