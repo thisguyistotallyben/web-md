@@ -87,6 +87,10 @@ export default function Sidebar({
     loadSettings();
     // Dismiss menus on document click or escape key
     const handleDismiss = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target && target.closest(`.${styles.moreActionsBtn}`)) {
+        return; // Do not dismiss if clicking the actions button itself!
+      }
       setContextMenu(null);
     };
     const handleEscape = (e: KeyboardEvent) => {
