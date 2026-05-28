@@ -1,0 +1,347 @@
+/* web-md Elegant Themes & Global CSS Reset */
+
+:root {
+  /* Default/Core Theme Variables (Dark Mode) */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: Georgia, Cambria, "Times New Roman", Times, serif;
+
+  --bg-deep: #0a0a0a;
+  --bg-surface: #141414;
+  --bg-sidebar: #0f0f0f;
+  --bg-glass: rgba(20, 20, 20, 0.85);
+  --border: #222222;
+  --text-main: #e0e0e0;
+  --text-muted: #888888;
+  --accent: #ffcc00;
+  --accent-light: rgba(255, 204, 0, 0.1);
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 4px;
+
+  /* Code Syntax Colors */
+  --code-comment: #7c7c7c;
+  --code-keyword: var(--accent);
+  --code-string: #b5cea8;
+  --code-number: #dcdcaa;
+  --code-title: #4ec9b0;
+  --code-type: #9cdcfe;
+}
+
+/* 1. Theme Light */
+.theme-light {
+  --bg-deep: #f7f5f0;
+  --bg-surface: #ffffff;
+  --bg-sidebar: #fbf9f5;
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --border: #e2dbce;
+  --text-main: #1a1a1a;
+  --text-muted: #6b6357;
+  --accent: #b8860b;
+  --accent-light: rgba(184, 134, 11, 0.12);
+  --shadow: 0 8px 32px 0 rgba(184, 134, 11, 0.05);
+
+  --code-comment: #008000;
+  --code-keyword: #0000ff;
+  --code-string: #a31515;
+  --code-number: #098658;
+  --code-title: #267f99;
+  --code-type: #af00db;
+}
+
+/* 2. Theme Sepia */
+.theme-sepia {
+  --bg-deep: #f4ecd8;
+  --bg-surface: #efe3c2;
+  --bg-sidebar: #e5d5a9;
+  --bg-glass: rgba(239, 227, 194, 0.85);
+  --border: #dccba0;
+  --text-main: #433422;
+  --text-muted: #705e4c;
+  --accent: #8b4513;
+  --accent-light: rgba(139, 69, 19, 0.12);
+  --shadow: 0 8px 32px 0 rgba(139, 69, 19, 0.06);
+
+  --code-comment: #a69e8a;
+  --code-keyword: #8b4513;
+  --code-string: #5d7a1f;
+  --code-number: #b05a00;
+  --code-title: #3a5a67;
+  --code-type: #7a4a8a;
+}
+
+/* 3. Theme Sepia Dark */
+.theme-sepia-dark {
+  --bg-deep: #1c1814;
+  --bg-surface: #28231e;
+  --bg-sidebar: #231f1a;
+  --bg-glass: rgba(40, 35, 30, 0.85);
+  --border: #38312a;
+  --text-main: #e5d5a9;
+  --text-muted: #a69e8a;
+  --accent: #d4a76a;
+  --accent-light: rgba(212, 167, 106, 0.12);
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+
+  --code-comment: #82776c;
+  --code-keyword: #d4a76a;
+  --code-string: #9ca67b;
+  --code-number: #e5d5a9;
+  --code-title: #bdae93;
+  --code-type: #d5c4a1;
+}
+
+/* 4. Theme High Contrast Light */
+.theme-high-contrast {
+  --bg-deep: #ffffff;
+  --bg-surface: #ffffff;
+  --bg-sidebar: #f0f0f0;
+  --bg-glass: rgba(255, 255, 255, 0.95);
+  --border: #000000;
+  --text-main: #000000;
+  --text-muted: #333333;
+  --accent: #0000ff;
+  --accent-light: rgba(0, 0, 255, 0.15);
+  --shadow: none;
+
+  --code-comment: #000000;
+  --code-keyword: #0000ff;
+  --code-string: #000000;
+  --code-number: #0000ff;
+  --code-title: #0000ff;
+  --code-type: #000000;
+}
+
+/* 5. Theme High Contrast Dark */
+.theme-dark-hc {
+  --bg-deep: #000000;
+  --bg-surface: #000000;
+  --bg-sidebar: #111111;
+  --bg-glass: rgba(0, 0, 0, 0.95);
+  --border: #ffffff;
+  --text-main: #ffffff;
+  --text-muted: #aaaaaa;
+  --accent: #00ff00;
+  --accent-light: rgba(0, 255, 0, 0.2);
+  --shadow: none;
+
+  --code-comment: #aaaaaa;
+  --code-keyword: #00ff00;
+  --code-string: #ffffff;
+  --code-number: #00ff00;
+  --code-title: #00ff00;
+  --code-type: #ffffff;
+}
+
+/* 6. Theme Gruvbox */
+.theme-gruvbox {
+  --bg-deep: #282828;
+  --bg-surface: #3c3836;
+  --bg-sidebar: #32302f;
+  --bg-glass: rgba(60, 56, 54, 0.85);
+  --border: #504945;
+  --text-main: #ebdbb2;
+  --text-muted: #a89984;
+  --accent: #fe8019;
+  --accent-light: rgba(254, 128, 25, 0.15);
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+
+  --code-comment: #928374;
+  --code-keyword: #fb4934;
+  --code-string: #b8bb26;
+  --code-number: #d3869b;
+  --code-title: #b8bb26;
+  --code-type: #fabd2f;
+}
+
+/* 7. Theme Hot Dog Stand */
+.theme-hotdog {
+  --bg-deep: #ffffff;
+  --bg-surface: #d30000;
+  --bg-sidebar: #000000;
+  --bg-glass: #d30000;
+  --border: #000000;
+  --text-main: #000000;
+  --text-muted: #555555;
+  --accent: #ffff00;
+  --accent-light: rgba(255, 255, 0, 0.3);
+  --shadow: none;
+  --radius-lg: 0px;
+  --radius-md: 0px;
+  --radius-sm: 0px;
+
+  --code-comment: #7f7f7f;
+  --code-keyword: #d30000;
+  --code-string: #008000;
+  --code-number: #0000ff;
+  --code-title: #000000;
+  --code-type: #d30000;
+}
+
+/* 8. Theme Windows 98 */
+.theme-win98 {
+  --bg-deep: #55aaaa;
+  --bg-surface: #c0c0c0;
+  --bg-sidebar: #dcdcdc;
+  --bg-glass: #c0c0c0;
+  --border: #808080;
+  --text-main: #000000;
+  --text-muted: #808080;
+  --accent: #000080;
+  --accent-light: rgba(0, 0, 128, 0.15);
+  --shadow: none;
+  --radius-lg: 0px;
+  --radius-md: 0px;
+  --radius-sm: 0px;
+
+  --code-comment: #808080;
+  --code-keyword: #000080;
+  --code-string: #008000;
+  --code-number: #800000;
+  --code-title: #000080;
+  --code-type: #008080;
+}
+
+/* 9. Theme Olive Grove (Nice Green Theme from Bible Notes) */
+.theme-olive {
+  --bg-deep: #e8ece5;
+  --bg-surface: #f4f7f2;
+  --bg-sidebar: #eff3ea;
+  --bg-glass: rgba(239, 243, 234, 0.85);
+  --border: #d4ded0;
+  --text-main: #24301f;
+  --text-muted: #5e6b59;
+  --accent: #55724c;
+  --accent-light: rgba(85, 114, 76, 0.12);
+  --shadow: 0 8px 32px 0 rgba(85, 114, 76, 0.05);
+
+  --code-comment: #7d8b76;
+  --code-keyword: #55724c;
+  --code-string: #6e8c64;
+  --code-number: #a8583b;
+  --code-title: #3e5a37;
+  --code-type: #24301f;
+}
+
+/* 10. Theme Olive Grove Dark */
+.theme-olive-dark {
+  --bg-deep: #0c0f0a;
+  --bg-surface: #141a10;
+  --bg-sidebar: #11160e;
+  --bg-glass: rgba(20, 26, 16, 0.85);
+  --border: #232f1c;
+  --text-main: #e2ecd9;
+  --text-muted: #8c9c84;
+  --accent: #82b075;
+  --accent-light: rgba(130, 176, 117, 0.15);
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+
+  --code-comment: #607358;
+  --code-keyword: #82b075;
+  --code-string: #c5dbb0;
+  --code-number: #e8a87c;
+  --code-title: #a3c996;
+  --code-type: #e2ecd9;
+}
+
+/* Resets & Scrollbars */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-sans);
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Scrollbar customizations */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Hotdog Retro Scrollbars */
+.theme-hotdog ::-webkit-scrollbar {
+  width: 16px !important;
+  height: 16px !important;
+  background-color: #d30000 !important;
+}
+.theme-hotdog ::-webkit-scrollbar-thumb {
+  background-color: #ffff00 !important;
+  border: 3px solid #000000 !important;
+  border-radius: 0px !important;
+}
+.theme-hotdog ::-webkit-scrollbar-thumb:hover {
+  background-color: #ffffff !important;
+}
+.theme-hotdog ::-webkit-scrollbar-track {
+  background-color: #d30000 !important;
+  border-left: 2px solid #000000 !important;
+}
+
+/* Windows 98 Retro Scrollbars */
+.theme-win98 ::-webkit-scrollbar {
+  width: 16px !important;
+  height: 16px !important;
+  background-color: #c0c0c0 !important;
+}
+.theme-win98 ::-webkit-scrollbar-thumb {
+  background-color: #c0c0c0 !important;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #808080 !important;
+  border-bottom: 2px solid #808080 !important;
+  box-shadow: inset 1px 1px 0px #ffffff, inset -1px -1px 0px #808080 !important;
+  border-radius: 0px !important;
+}
+.theme-win98 ::-webkit-scrollbar-track {
+  background-color: #dfdfdf !important;
+  background-image: linear-gradient(45deg, #c0c0c0 25%, transparent 25%), linear-gradient(-45deg, #c0c0c0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #c0c0c0 75%), linear-gradient(-45deg, transparent 75%, #c0c0c0 75%);
+  background-size: 4px 4px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+::selection {
+  background-color: var(--accent-light);
+  color: var(--text-main);
+}
+sup {
+  font-size: 0.75em;
+  vertical-align: super;
+  line-height: 0;
+}
