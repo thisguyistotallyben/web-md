@@ -725,10 +725,11 @@ export default function Sidebar({
   };
 
   return (
-    <div
-      className={`${styles.sidebar} ${isCollapsed ? styles.sidebarCollapsed : styles.sidebarOpen}`}
-    >
-      <div className={styles.sidebarInner}>
+    <>
+      <div
+        className={`${styles.sidebar} ${isCollapsed ? styles.sidebarCollapsed : styles.sidebarOpen}`}
+      >
+        <div className={styles.sidebarInner}>
         {/* Header */}
         <div className={`${styles.header} ${isSettingsOpen || isTrashOpen ? styles.drillDown : ''}`}>
           {!isSettingsOpen && !isTrashOpen ? (
@@ -922,6 +923,7 @@ export default function Sidebar({
           </div>
         )}
       </div>
+      </div>
 
       {/* Right-click Context Menu */}
       {contextMenu && (
@@ -1023,6 +1025,6 @@ export default function Sidebar({
           <span className={styles.name}>{touchDragProxy.name.replace('.md', '')}</span>
         </div>
       )}
-    </div>
+    </>
   );
 }
