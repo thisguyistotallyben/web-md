@@ -31,7 +31,7 @@ export default function Home() {
     return (
       <div className={styles.loadingScreen}>
         <div className={styles.loadingSpinner} />
-        <span className={styles.loadingText}>Opening Sanctuary library...</span>
+        <span className={styles.loadingText}>Opening WebMD workspace...</span>
       </div>
     );
   }

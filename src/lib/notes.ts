@@ -65,12 +65,21 @@ export async function listDirectory(relativePath: string = ''): Promise<FileItem
     })
   );
 
-  return items.filter(
+  const filtered = items.filter(
     (item): item is FileItem =>
       item !== null &&
       (item.type === 'folder' || item.name.endsWith('.md')) &&
       item.name !== 'settings.json'
   );
+
+  return filtered.sort((a, b) => {
+    // 1. Folders first, notes second
+    if (a.type !== b.type) {
+      return a.type === 'folder' ? -1 : 1;
+    }
+    // 2. Alphabetical by name
+    return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
+  });
 }
 
 // Recursively get all files in a directory

@@ -426,15 +426,15 @@
   min-height: 100%;
 }
 
-.tiptapEditor :global(.ProseMirror) {
+.tiptapEditor {
   outline: none;
   min-height: 400px;
 }
 
 /* standard typography styles inside editor */
-.tiptapEditor :global(.ProseMirror) h1,
-.tiptapEditor :global(.ProseMirror) h2,
-.tiptapEditor :global(.ProseMirror) h3 {
+.tiptapEditor h1,
+.tiptapEditor h2,
+.tiptapEditor h3 {
   font-family: var(--font-serif);
   color: var(--text-main);
   margin-top: 1.25em;
@@ -443,15 +443,32 @@
   line-height: 1.25;
 }
 
-.tiptapEditor :global(.ProseMirror) h1 { font-size: 26px; }
-.tiptapEditor :global(.ProseMirror) h2 { font-size: 21px; }
-.tiptapEditor :global(.ProseMirror) h3 { font-size: 18px; }
+.tiptapEditor h1 { font-size: 26px; }
+.tiptapEditor h2 { font-size: 21px; }
+.tiptapEditor h3 { font-size: 18px; }
 
-.tiptapEditor :global(.ProseMirror) p {
+.tiptapEditor p {
   margin-bottom: 1.15em;
 }
 
-.tiptapEditor :global(.ProseMirror) blockquote {
+.tiptapEditor a {
+  color: var(--accent) !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 1px !important;
+  text-underline-offset: 3px !important;
+  transition: color 0.15s ease, opacity 0.15s ease !important;
+}
+
+.tiptapEditor a:hover {
+  color: var(--accent) !important;
+  opacity: 0.8 !important;
+}
+
+.tiptapEditor a:active {
+  color: var(--accent) !important;
+}
+
+.tiptapEditor blockquote {
   border-left: 3px solid var(--accent);
   padding-left: 16px;
   font-style: italic;
@@ -459,17 +476,17 @@
   margin: 1.2em 0;
 }
 
-.tiptapEditor :global(.ProseMirror) ul,
-.tiptapEditor :global(.ProseMirror) ol {
+.tiptapEditor ul,
+.tiptapEditor ol {
   padding-left: 20px;
   margin-bottom: 1.15em;
 }
 
-.tiptapEditor :global(.ProseMirror) li {
+.tiptapEditor li {
   margin-bottom: 0.4em;
 }
 
-.tiptapEditor :global(.ProseMirror) code {
+.tiptapEditor code {
   background-color: var(--bg-deep);
   padding: 2px 6px;
   border-radius: 4px;
@@ -477,7 +494,7 @@
   font-size: 0.9em;
 }
 
-.tiptapEditor :global(.ProseMirror) pre {
+.tiptapEditor pre {
   background-color: var(--bg-deep);
   padding: 14px;
   border-radius: var(--radius-md);
@@ -485,13 +502,13 @@
   margin: 1.2em 0;
 }
 
-.tiptapEditor :global(.ProseMirror) pre code {
+.tiptapEditor pre code {
   background: none;
   padding: 0;
 }
 
 /* TipTap placeholder style */
-.tiptapEditor :global(.ProseMirror) p.is-editor-empty:first-child::before {
+.tiptapEditor :global(.is-editor-empty):first-child::before {
   color: var(--text-muted);
   content: attr(data-placeholder);
   float: left;

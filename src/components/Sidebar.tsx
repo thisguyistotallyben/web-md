@@ -100,6 +100,53 @@ export default function Sidebar({
     };
   }, []);
 
+  // Automatically restore children for all folders in expandedFolders when treeItems changes
+  useEffect(() => {
+    let active = true;
+
+    const loadExpandedChildren = async () => {
+      if (expandedFolders.size === 0) return;
+
+      let changed = false;
+      const queue = [...treeItems];
+
+      while (queue.length > 0) {
+        const item = queue.shift();
+        if (!item) continue;
+
+        if (item.type === 'folder') {
+          if (expandedFolders.has(item.path)) {
+            if (!item.children) {
+              try {
+                const res = await fetch(`/api/fs?path=${encodeURIComponent(item.path)}`);
+                if (res.ok && active) {
+                  item.children = await res.json();
+                  changed = true;
+                }
+              } catch (err) {
+                console.error('[Sidebar] Failed to reload children for expanded folder:', item.path, err);
+              }
+            }
+            if (item.children) {
+              queue.push(...item.children);
+            }
+          }
+        }
+      }
+
+      if (changed && active) {
+        // Trigger a force re-render by doing a shallow copy of expandedFolders
+        setExpandedFolders(new Set(expandedFolders));
+      }
+    };
+
+    loadExpandedChildren();
+
+    return () => {
+      active = false;
+    };
+  }, [treeItems]);
+
   const loadSettings = async () => {
     try {
       const res = await fetch('/api/settings');
@@ -255,6 +302,25 @@ export default function Sidebar({
       onConfirm: async (newName) => {
         if (!newName.trim() || newName === currentDisplayName) return;
         const finalName = isNote ? (newName.endsWith('.md') ? newName : `${newName}.md`) : newName;
+        
+        if (item.type === 'folder') {
+          const parentPath = item.path.split('/').slice(0, -1).join('/');
+          const newPath = parentPath ? `${parentPath}/${finalName}` : finalName;
+          setExpandedFolders((prev) => {
+            const next = new Set<string>();
+            for (const path of prev) {
+              if (path === item.path) {
+                next.add(newPath);
+              } else if (path.startsWith(item.path + '/')) {
+                next.add(path.replace(item.path, newPath));
+              } else {
+                next.add(path);
+              }
+            }
+            return next;
+          });
+        }
+
         await onRenameItem(item.path, finalName);
       },
     });
@@ -342,13 +408,27 @@ export default function Sidebar({
         body: JSON.stringify({ sourcePath, targetParentPath }),
       });
       if (res.ok) {
-        if (targetParentPath) {
-          setExpandedFolders((prev) => {
-            const next = new Set(prev);
+        setExpandedFolders((prev) => {
+          const next = new Set(prev);
+          if (targetParentPath) {
             next.add(targetParentPath);
-            return next;
-          });
-        }
+          }
+          // If we moved a folder, we need to update its path and any nested expanded paths inside it!
+          if (draggedItem && draggedItem.type === 'folder' && draggedItem.path === sourcePath) {
+            const folderName = sourcePath.split('/').pop() || '';
+            const newPath = targetParentPath ? `${targetParentPath}/${folderName}` : folderName;
+            for (const path of prev) {
+              if (path === sourcePath) {
+                next.delete(path);
+                next.add(newPath);
+              } else if (path.startsWith(sourcePath + '/')) {
+                next.delete(path);
+                next.add(path.replace(sourcePath, newPath));
+              }
+            }
+          }
+          return next;
+        });
         onRefreshTree();
       }
     } catch (err) {
@@ -619,6 +699,7 @@ export default function Sidebar({
                 className={styles.moreActionsBtn}
                 onClick={(e) => {
                   e.stopPropagation();
+                  e.nativeEvent.stopPropagation(); // Stop native bubbling to prevent document click dismissals!
                   const rect = e.currentTarget.getBoundingClientRect();
                   setContextMenu({
                     x: Math.min(rect.left, window.innerWidth - 180),
